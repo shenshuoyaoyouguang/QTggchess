@@ -1,4 +1,4 @@
-/*
+ï»¿/*
     This file is part of Cute Chess.
     Copyright (C) 2008-2018 Cute Chess authors
 
@@ -22,7 +22,6 @@
 #include <QSettings>
 
 #include <board/boardfactory.h>
-#include <board/syzygytablebase.h>
 #include <engineconfiguration.h>
 #include <openingsuite.h>
 #include <polyglotbook.h>
@@ -60,8 +59,8 @@ GameSettingsWidget::GameSettingsWidget(QWidget *parent)
 
 	connect(ui->m_browsePolyglotFile, &QPushButton::clicked, this, [=]()
 	{
-		auto dlg = new QFileDialog(this, tr("Ñ¡Ôñ¿ª¾Ö¿âÎÄ¼þ"), QString(),
-			tr("±øºÓ¿ª¾Ö¿â (*.obk)"));
+		auto dlg = new QFileDialog(this, tr("é€‰æ‹©å¼€å±€åº“æ–‡ä»¶"), QString(),
+			tr("å…µæ²³å¼€å±€åº“ (*.obk)"));
 		connect(dlg, &QFileDialog::fileSelected,
 			ui->m_polyglotFileEdit, &QLineEdit::setText);
 		dlg->setAttribute(Qt::WA_DeleteOnClose);
@@ -145,7 +144,6 @@ GameAdjudicator GameSettingsWidget::adjudicator() const
 			       ui->m_resignTwoSidedRadio->isEnabled()
 			       && ui->m_resignTwoSidedRadio->isChecked());
 	ret.setMaximumGameLength(ui->m_maxGameLengthSpin->value());
-	ret.setTablebaseAdjudication(ui->m_tbCheck->isChecked());
 
 	return ret;
 }
@@ -218,14 +216,8 @@ void GameSettingsWidget::readSettings()
 {
 	QSettings s;
 
-	bool tbOk = false;
-	QString tbPath = s.value("ui/tb_path").toString();
-	if (!tbPath.isEmpty())
-	{
-		tbOk = SyzygyTablebase::initialize({ tbPath }) &&
-		       SyzygyTablebase::tbAvailable(3);
-		ui->m_tbCheck->setEnabled(tbOk);
-	}
+	// ponytail: Syzygy tablebases removed; tb checkbox stays inert.
+	ui->m_tbCheck->setEnabled(false);
 
 	s.beginGroup("games");
 
@@ -264,7 +256,7 @@ void GameSettingsWidget::readSettings()
 	ui->m_maxGameLengthSpin->setValue(s.value("max_moves", 0).toInt());
 	s.endGroup();
 
-	ui->m_tbCheck->setChecked(tbOk && s.value("use_tb").toBool());
+	ui->m_tbCheck->setChecked(false);
 	ui->m_ponderingCheck->setChecked(s.value("pondering").toBool());
 
 	s.endGroup();

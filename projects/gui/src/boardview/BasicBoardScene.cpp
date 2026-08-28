@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 	This file is part of Cute Chess.
 	Copyright (C) 2008-2018 Cute Chess authors
 
@@ -48,7 +48,7 @@ BasicBoardScene::BasicBoardScene(QObject* parent)
 	m_squares(nullptr),
 	m_renderer(new QSvgRenderer((QCoreApplication::applicationDirPath() + "/image/default.svg"), this))
 {
-	this->setBackgroundBrush(QColor(0xf6, 0xf5, 0xf0));  // Ö½ÖÊÊéµÄ¸Ð¾õ'
+	this->setBackgroundBrush(QColor(0xf6, 0xf5, 0xf0));  // çº¸è´¨ä¹¦çš„æ„Ÿè§‰'
 
 	PgnGame pgn;
 	m_boards[0] = pgn.createBoard(); // start board
@@ -114,7 +114,7 @@ void BasicBoardScene::populate(int idx)
 		for (int y = 0; y < startBoard->height(); y++)
 		{
 			Chess::Square sq(x, y);
-			GraphicsPiece* piece(createPiece(startBoard->pieceAt(sq)));   // ·ÅÉÏÆå×Ó
+			GraphicsPiece* piece(createPiece(startBoard->pieceAt(sq)));   // æ”¾ä¸Šæ£‹å­
 
 			if (piece != nullptr) {
 				piece->setFlag(QGraphicsItem::ItemIsMovable, true);
@@ -217,7 +217,7 @@ void BasicBoardScene::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
 			}
 		}
 
-		// Æå×ÓÂäÔÚ²»¸ÃÂäµÄµØ·½£¬ ·Å»ØÆå×Ó
+		// æ£‹å­è½åœ¨ä¸è¯¥è½çš„åœ°æ–¹ï¼Œ æ”¾å›žæ£‹å­
 		piece->setParentItem(m_sourceParent);
 		piece->setPos(m_sourcePos);
 	}

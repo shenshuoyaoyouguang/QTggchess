@@ -1,4 +1,4 @@
-/*
+Ôªø/*
     This file is part of Cute Chess.
     Copyright (C) 2008-2018 Cute Chess authors
 
@@ -27,7 +27,7 @@
 #include <QSettings>
 #include <QTextCodec>
 
-#include <mersenne.h>
+#include <QRandomGenerator>
 #include <enginemanager.h>
 #include <gamemanager.h>
 #include <board/boardfactory.h>
@@ -62,7 +62,7 @@ CuteChessApplication::CuteChessApplication(int& argc, char* argv[])
 	  m_gameWall(nullptr),
 	  m_initialWindowCreated(false)
 {
-	Mersenne::initialize(QTime(0,0,0).msecsTo(QTime::currentTime()));
+	QRandomGenerator::global()->seed(QTime(0,0,0).msecsTo(QTime::currentTime()));
 
 	// Set the application icon
 	QIcon icon;
@@ -125,7 +125,7 @@ QString CuteChessApplication::userName()
 	QString name = QString::fromLocal8Bit(nn);
 	return name;
 
-	//return "ÕÊº“";
+	//return "Áé©ÂÆ∂";
 	#else
 	if (QSettings().value("ui/use_full_user_name", true).toBool())
 	{
@@ -264,7 +264,7 @@ void CuteChessApplication::showGameWall()
 		auto flags = m_gameWall->windowFlags();
 		m_gameWall->setWindowFlags(flags | Qt::Window);
 		m_gameWall->setAttribute(Qt::WA_DeleteOnClose, true);
-		m_gameWall->setWindowTitle(tr("µ±«∞∂‘æ÷"));
+		m_gameWall->setWindowTitle(tr("ÂΩìÂâçÂØπÂ±Ä"));
 	}
 
 	showDialog(m_gameWall);

@@ -1,4 +1,4 @@
-/*
+ï»¿/*
     This file is part of Cute Chess.
 
     Cute Chess is free software: you can redistribute it and/or modify
@@ -486,7 +486,7 @@ void ChessGame::setStartingFen(const QString& fen)
 	m_startingFen = stFList[0];
 
 	if (stFList.length() == 2) {
-		// Èç¹ûÓÐmove
+		// å¦‚æžœæœ‰move
 		//m_board->setFenString(m_startingFen);
 
 		QStringList strList = stFList[1].split(' ');
@@ -656,7 +656,7 @@ bool ChessGame::resetBoard()
 
 	if (!m_board->setFenString(fen))
 	{
-		qWarning("ÎÞÐ§µÄ FEN ×Ö·û´®: %s", qUtf8Printable(fen));
+		qWarning("æ— æ•ˆçš„ FEN å­—ç¬¦ä¸²: %s", qUtf8Printable(fen));
 		m_board->reset();
 		//if (m_board->isRandomVariant())
 		//	m_startingFen = m_board->fenString();
@@ -755,7 +755,7 @@ void ChessGame::resume()
 	m_paused = false;
 
 	QMetaObject::invokeMethod(this, "startTurn", Qt::QueuedConnection);  
-	// Èç¹ûtypeÊÇQt :: QueuedConnection Ôò»á·¢ËÍÒ»¸öQEvent£¬²¢ÔÚÓ¦ÓÃ³ÌÐò½øÈëÖ÷ÊÂ¼þÑ­»·ºóÁ¢¼´µ÷ÓÃ¸Ã³ÉÔ±¡£
+	// å¦‚æžœtypeæ˜¯Qt :: QueuedConnection åˆ™ä¼šå‘é€ä¸€ä¸ªQEventï¼Œå¹¶åœ¨åº”ç”¨ç¨‹åºè¿›å…¥ä¸»äº‹ä»¶å¾ªçŽ¯åŽç«‹å³è°ƒç”¨è¯¥æˆå‘˜ã€‚
 }
 
 void ChessGame::initializePgn()
@@ -802,7 +802,7 @@ void ChessGame::startGame()
 			emitStartFailed();
 			return;
 		}
-		if (!player->supportsVariant(m_board->variant()))		// ÓÎÏ·±äÖÖ´¦Àí
+		if (!player->supportsVariant(m_board->variant()))		// æ¸¸æˆå˜ç§å¤„ç†
 		{
 			qWarning("%s doesn't support variant %s",
 				 qUtf8Printable(player->name()),

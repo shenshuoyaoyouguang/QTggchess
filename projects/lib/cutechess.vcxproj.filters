@@ -58,7 +58,7 @@
     <ClCompile Include="src\chessplayer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\econode.cpp">
+    <ClCompile Include="src\eco.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\elo.cpp">
@@ -187,15 +187,6 @@
     <ClCompile Include="src\enginebuilder.cpp">
       <Filter>Source Files\engine</Filter>
     </ClCompile>
-    <ClCompile Include="src\enginebuttonoption.cpp">
-      <Filter>Source Files\engine</Filter>
-    </ClCompile>
-    <ClCompile Include="src\enginecheckoption.cpp">
-      <Filter>Source Files\engine</Filter>
-    </ClCompile>
-    <ClCompile Include="src\enginecombooption.cpp">
-      <Filter>Source Files\engine</Filter>
-    </ClCompile>
     <ClCompile Include="src\engineconfiguration.cpp">
       <Filter>Source Files\engine</Filter>
     </ClCompile>
@@ -209,15 +200,6 @@
       <Filter>Source Files\engine</Filter>
     </ClCompile>
     <ClCompile Include="src\engineoptionfactory.cpp">
-      <Filter>Source Files\engine</Filter>
-    </ClCompile>
-    <ClCompile Include="src\engineprocess_win.cpp">
-      <Filter>Source Files\engine</Filter>
-    </ClCompile>
-    <ClCompile Include="src\enginespinoption.cpp">
-      <Filter>Source Files\engine</Filter>
-    </ClCompile>
-    <ClCompile Include="src\enginetextoption.cpp">
       <Filter>Source Files\engine</Filter>
     </ClCompile>
     <ClCompile Include="src\board\side.cpp">
@@ -264,7 +246,7 @@
     <ClInclude Include="src\classregistry.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\econode.h">
+    <ClInclude Include="src\eco.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\elo.h">
@@ -274,15 +256,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\enginebuilder.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\enginebuttonoption.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\enginecheckoption.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\enginecombooption.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\engineconfiguration.h">
@@ -298,15 +271,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\engineoptionfactory.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <QtMoc Include="src\engineprocess_win.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <ClInclude Include="src\enginespinoption.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\enginetextoption.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\epdrecord.h">

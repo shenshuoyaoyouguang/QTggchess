@@ -1,5 +1,2 @@
 TEMPLATE = subdirs
-SUBDIRS = chessboard tb sprt mersenne tournamentplayer tournamentpair polyglotbook
-win32 {
-    SUBDIRS += pipereader
-}
+SUBDIRS = chessboard sprt tournamentplayer tournamentpair polyglotbook

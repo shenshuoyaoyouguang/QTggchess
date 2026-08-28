@@ -1,4 +1,4 @@
-/*
+﻿/*
     This file is part of Cute Chess.
     Copyright (C) 2008-2018 Cute Chess authors
 
@@ -19,8 +19,8 @@
 #include "enginemanager.h"
 #include <QFile>
 #include <QTextStream>
-#include <jsonparser.h>
-#include <jsonserializer.h>
+#include <QJsonDocument>
+#include <QJsonParseError>
 
 
 EngineManager::EngineManager(QObject* parent)
@@ -102,16 +102,27 @@ void EngineManager::loadEngines(const QString& fileName)
 		return;
 	}
 
-	QTextStream stream(&input);
-	JsonParser parser(stream);
-	const QVariantList engines(parser.parse().toList());
-
-	if (parser.hasError())
+	QByteArray data = input.readAll();
+	QJsonParseError parseError;
+	QJsonDocument doc = QJsonDocument::fromJson(data, &parseError);
+	// ponytail: legacy cutechess wrote engines.json in the local 8-bit
+	// codec (e.g. GBK on Chinese Windows). If UTF-8 parse fails, retry
+	// as local 8-bit to keep those files loadable. Upgrade path: drop
+	// fallback once users have migrated.
+	if (doc.isNull())
 	{
-		qWarning("%s", qUtf8Printable(QString("bad engine configuration file line %1 in %2: %3")
-			.arg(parser.errorLineNumber()).arg(fileName).arg(parser.errorString()))); // clazy:exclude=qstring-arg
-		return;
+		QJsonParseError localErr;
+		doc = QJsonDocument::fromJson(QString::fromLocal8Bit(data).toUtf8(),
+					       &localErr);
+		if (doc.isNull())
+		{
+			qWarning("%s", qUtf8Printable(QString("bad engine configuration file %1: %2")
+				.arg(fileName).arg(parseError.errorString()))); // clazy:exclude=qstring-arg
+			return;
+		}
 	}
+
+	const QVariantList engines(doc.toVariant().toList());
 
 	for (const QVariant& engine : engines)
 		addEngine(EngineConfiguration(engine));
@@ -131,9 +142,8 @@ void EngineManager::saveEngines(const QString& fileName)
 		return;
 	}
 
-	QTextStream out(&output);
-	JsonSerializer serializer(engines);
-	serializer.serialize(out);
+	QJsonDocument doc(QJsonDocument::fromVariant(engines));
+	output.write(doc.toJson(QJsonDocument::Indented));
 }
 
 QSet<QString> EngineManager::engineNames() const

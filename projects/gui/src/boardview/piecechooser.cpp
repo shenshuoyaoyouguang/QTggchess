@@ -1,4 +1,4 @@
-#include "piecechooser.h"
+﻿#include "piecechooser.h"
 #include <QPainter>
 #include <QGraphicsScene>
 #include <QGraphicsSceneMouseEvent>

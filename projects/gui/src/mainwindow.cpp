@@ -1,4 +1,4 @@
-/*
+ï»¿/*
     This file is part of Cute Chess.
 
     Cute Chess is free software: you can redistribute it and/or modify
@@ -72,17 +72,21 @@
 #include <modeltest.h>
 #endif
 
+#ifdef QTGG_CAPTURE
 MainWindow::TabData::TabData(ChessGame* game, Chess::Capture* cap, Tournament* tournament)
+#else
+MainWindow::TabData::TabData(ChessGame* game, Tournament* tournament)
+#endif
 	: m_id(game),
 	  m_game(game),
 	  m_pgn(game->pgn()),
 	  m_tournament(tournament),
-	  m_finished(false),
-	m_cap(cap)
+	  m_finished(false)
+#ifdef QTGG_CAPTURE
+	, m_cap(cap)
+#endif
 {
 	//m_cap = new Chess::Capture(this);
-
-	
 }
 
 MainWindow::MainWindow(ChessGame* game)
@@ -113,8 +117,8 @@ MainWindow::MainWindow(ChessGame* game)
 	new ModelTest(m_tagsModel, this);
 	#endif
 
-	m_evalHistory = new EvalHistory(this);					// ÀúÊ·ÇúÏß´°¿Ú
-	m_evalWidgets[0] = new EvalWidget(this);				// PV Â·¾¶´°¿Ú
+	m_evalHistory = new EvalHistory(this);					// å†å²æ›²çº¿çª—å£
+	m_evalWidgets[0] = new EvalWidget(this);				// PV è·¯å¾„çª—å£
 	m_evalWidgets[1] = new EvalWidget(this);
 
 	QVBoxLayout* mainLayout = new QVBoxLayout();
@@ -132,10 +136,10 @@ MainWindow::MainWindow(ChessGame* game)
 	createToolBars();
 	createDockWindows();
 
-	// ×´Ì¬À¸
+	// çŠ¶æ€æ 
 	statusBar()->showMessage("http://www.ggzero.cn");
 
-	connect(m_moveList, SIGNAL(moveClicked(int,bool)),			// µã»÷ÆåÆ××ß²½
+	connect(m_moveList, SIGNAL(moveClicked(int,bool)),			// ç‚¹å‡»æ£‹è°±èµ°æ­¥
 	        m_gameViewer, SLOT(viewMove(int,bool)));
 	connect(m_moveList, SIGNAL(commentClicked(int, QString)),
 		this, SLOT(editMoveComment(int, QString)));
@@ -156,47 +160,47 @@ MainWindow::~MainWindow()
 
 void MainWindow::createActions()
 {
-	m_editBoardAct = new QAction(tr("±à¼­¾ÖÃæ"), this);
+	m_editBoardAct = new QAction(tr("ç¼–è¾‘å±€é¢"), this);
 
-	m_newGameAct = new QAction(tr("&ĞÂ½¨¶Ô¾Ö..."), this);
+	m_newGameAct = new QAction(tr("&æ–°å»ºå¯¹å±€..."), this);
 	m_newGameAct->setShortcut(QKeySequence::New);
 
-	m_openPgnAct = new QAction(tr("´ò¿ª PGN ¶Ô¾Ö"), this);
+	m_openPgnAct = new QAction(tr("æ‰“å¼€ PGN å¯¹å±€"), this);
 	m_openPgnAct->setShortcut(QKeySequence::Open);        //
 
-	m_closeGameAct = new QAction(tr("&¹Ø±Õ"), this);
+	m_closeGameAct = new QAction(tr("&å…³é—­"), this);
 	#ifdef Q_OS_WIN32
 	m_closeGameAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_W));
 	#else
 	m_closeGameAct->setShortcut(QKeySequence::Close);
 	#endif
 
-	m_saveGameAct = new QAction(tr("&±£´æ¶Ô¾Ö"), this);
+	m_saveGameAct = new QAction(tr("&ä¿å­˜å¯¹å±€"), this);
 	m_saveGameAct->setShortcut(QKeySequence::Save);
 
-	m_saveGameAsAct = new QAction(tr("&¶Ô¾ÖÁí´æÎª..."), this);
+	m_saveGameAsAct = new QAction(tr("&å¯¹å±€å¦å­˜ä¸º..."), this);
 	m_saveGameAsAct->setShortcut(QKeySequence::SaveAs);
 
-	m_copyFenAct = new QAction(tr("&¸´ÖÆ FEN"), this);
+	m_copyFenAct = new QAction(tr("&å¤åˆ¶ FEN"), this);
 	QAction* copyFenSequence = new QAction(m_gameViewer);
 	copyFenSequence->setShortcut(QKeySequence::Copy);
 	copyFenSequence->setShortcutContext(Qt::WidgetWithChildrenShortcut);
 	m_gameViewer->addAction(copyFenSequence);
 
-	m_pasteFenAct = new QAction(tr("&Õ³Ìù FEN"), this);
+	m_pasteFenAct = new QAction(tr("&ç²˜è´´ FEN"), this);
 	m_pasteFenAct->setShortcut(QKeySequence(QKeySequence::Paste));
 
-	m_copyPgnAct = new QAction(tr("&¸´ÖÆ PGN"), this);
+	m_copyPgnAct = new QAction(tr("&å¤åˆ¶ PGN"), this);
 
-	m_flipBoardAct = new QAction(tr("&ÉÏÏÂ·­×ªÆåÅÌ"), this);
+	m_flipBoardAct = new QAction(tr("&ä¸Šä¸‹ç¿»è½¬æ£‹ç›˜"), this);
 
-	m_adjudicateDrawAct = new QAction(tr("&ÅĞ¶¨ºÍÆå"), this);
-	m_adjudicateWhiteWinAct = new QAction(tr("ÅĞ¶¨ºìÊ¤"), this);
-	m_adjudicateBlackWinAct = new QAction(tr("ÅĞ¶¨ºÚÊ¤"), this);
+	m_adjudicateDrawAct = new QAction(tr("&åˆ¤å®šå’Œæ£‹"), this);
+	m_adjudicateWhiteWinAct = new QAction(tr("åˆ¤å®šçº¢èƒœ"), this);
+	m_adjudicateBlackWinAct = new QAction(tr("åˆ¤å®šé»‘èƒœ"), this);
 
-	m_resignGameAct = new QAction(tr("ÈÏÊä"), this);
+	m_resignGameAct = new QAction(tr("è®¤è¾“"), this);
 
-	m_quitGameAct = new QAction(tr("&ÍË³ö"), this);
+	m_quitGameAct = new QAction(tr("&é€€å‡º"), this);
 	m_quitGameAct->setMenuRole(QAction::QuitRole);
 	#ifdef Q_OS_WIN32
 	m_quitGameAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Q));
@@ -204,35 +208,35 @@ void MainWindow::createActions()
 	m_quitGameAct->setShortcut(QKeySequence::Quit);
 	#endif
 
-	m_newTournamentAct = new QAction(tr("&ĞÂ½¨ÁªÈü..."), this);
-	m_stopTournamentAct = new QAction(tr("&Í£Ö¹ÁªÈü"), this);
-	m_showTournamentResultsAct = new QAction(tr("&ÁªÈü½á¹û..."), this);
+	m_newTournamentAct = new QAction(tr("&æ–°å»ºè”èµ›..."), this);
+	m_stopTournamentAct = new QAction(tr("&åœæ­¢è”èµ›"), this);
+	m_showTournamentResultsAct = new QAction(tr("&è”èµ›ç»“æœ..."), this);
 
-	m_showSettingsAct = new QAction(tr("&Í¨ÓÃÉèÖÃ"), this);
+	m_showSettingsAct = new QAction(tr("&é€šç”¨è®¾ç½®"), this);
 	m_showSettingsAct->setMenuRole(QAction::PreferencesRole);
 
-	m_showGameDatabaseWindowAct = new QAction(tr("&¶Ô¾ÖÊı¾İ¿â"), this);
+	m_showGameDatabaseWindowAct = new QAction(tr("&å¯¹å±€æ•°æ®åº“"), this);
 
-	m_showGameWallAct = new QAction(tr("&µ±Ç°¶Ô¾Ö"), this);
+	m_showGameWallAct = new QAction(tr("&å½“å‰å¯¹å±€"), this);
 
-	m_minimizeAct = new QAction(tr("&×îĞ¡»¯"), this);
+	m_minimizeAct = new QAction(tr("&æœ€å°åŒ–"), this);
 	m_minimizeAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_M));
 
-	m_showPreviousTabAct = new QAction(tr("&ÏÔÊ¾Ç°Ò»¾Ö"), this);
+	m_showPreviousTabAct = new QAction(tr("&æ˜¾ç¤ºå‰ä¸€å±€"), this);
 	#ifdef Q_OS_MAC
 	m_showPreviousTabAct->setShortcut(QKeySequence(Qt::MetaModifier + Qt::ShiftModifier + Qt::Key_Tab));
 	#else
 	m_showPreviousTabAct->setShortcut(QKeySequence(Qt::ControlModifier + Qt::ShiftModifier + Qt::Key_Tab));
 	#endif
 
-	m_showNextTabAct = new QAction(tr("&ÏÔÊ¾ÏÂÒ»¾Ö"), this);
+	m_showNextTabAct = new QAction(tr("&æ˜¾ç¤ºä¸‹ä¸€å±€"), this);
 	#ifdef Q_OS_MAC
 	m_showNextTabAct->setShortcut(QKeySequence(Qt::MetaModifier + Qt::Key_Tab));
 	#else
 	m_showNextTabAct->setShortcut(QKeySequence(Qt::ControlModifier + Qt::Key_Tab));
 	#endif
 
-	m_aboutAct = new QAction(tr("&¹ØÓÚ¼Ñ¼Ñ½çÃæ..."), this);
+	m_aboutAct = new QAction(tr("&å…³äºä½³ä½³ç•Œé¢..."), this);
 	m_aboutAct->setMenuRole(QAction::AboutRole);
 
 	connect(m_editBoardAct, SIGNAL(triggered()), this, SLOT(editBoard()));
@@ -304,7 +308,7 @@ void MainWindow::createActions()
 
 void MainWindow::createMenus()
 {
-	m_gameMenu = menuBar()->addMenu(tr("&ÓÎÏ·"));
+	m_gameMenu = menuBar()->addMenu(tr("&æ¸¸æˆ"));
 	m_gameMenu->addAction(m_editBoardAct);
 	m_gameMenu->addAction(m_newGameAct);
 	m_gameMenu->addAction(m_openPgnAct);
@@ -325,27 +329,27 @@ void MainWindow::createMenus()
 	m_gameMenu->addSeparator();
 	m_gameMenu->addAction(m_quitGameAct);
 
-	m_tournamentMenu = menuBar()->addMenu(tr("&±ÈÈü"));
+	m_tournamentMenu = menuBar()->addMenu(tr("&æ¯”èµ›"));
 	m_tournamentMenu->addAction(m_newTournamentAct);
 	m_tournamentMenu->addAction(m_stopTournamentAct);
 	m_tournamentMenu->addAction(m_showTournamentResultsAct);
 	m_stopTournamentAct->setEnabled(false);
 
-	m_toolsMenu = menuBar()->addMenu(tr("&ÉèÖÃ"));
+	m_toolsMenu = menuBar()->addMenu(tr("&è®¾ç½®"));
 	m_toolsMenu->addAction(m_showSettingsAct);
         m_toolsMenu->addAction(m_showGameDatabaseWindowAct);
 
-	m_viewMenu = menuBar()->addMenu(tr("&ÊÓÍ¼"));
+	m_viewMenu = menuBar()->addMenu(tr("&è§†å›¾"));
 	m_viewMenu->addAction(m_flipBoardAct);
 	m_viewMenu->addSeparator();
 
-	m_windowMenu = menuBar()->addMenu(tr("&´°¿Ú"));
+	m_windowMenu = menuBar()->addMenu(tr("&çª—å£"));
 	addDefaultWindowMenu();
 
 	connect(m_windowMenu, SIGNAL(aboutToShow()), this,
 		SLOT(onWindowMenuAboutToShow()));
 
-	m_helpMenu = menuBar()->addMenu(tr("&°ïÖú"));
+	m_helpMenu = menuBar()->addMenu(tr("&å¸®åŠ©"));
 	m_helpMenu->addAction(m_aboutAct);
 }
 
@@ -376,12 +380,6 @@ void MainWindow::createToolBars()
 	addToolBar(toolBar);
 
 
-	//QAction* actLinkChessBoard;   // Á¬½ÓÆäËüÆåÅÌ
-	//QAction* actEngineThink;      // ÈÃÒıÇæË¼¿¼
-	//QAction* actEngineStop;       // ÈÃÒıÇæÍ£Ö¹
-	//QAction* actEngineAnalyze;    // ÈÃÒıÇæ·ÖÎö
-
-	// Ö÷²Ëµ¥¹¤¾ßÌõ
 	this->mainToolbar = new QToolBar(this);
 	this->mainToolbar->setObjectName(QStringLiteral("mainToolBar"));
 	this->mainToolbar->setToolButtonStyle(Qt::ToolButtonIconOnly); //  ToolButtonTextUnderIcon); ToolButtonIconOnly
@@ -389,40 +387,40 @@ void MainWindow::createToolBars()
 	this->mainToolbar->setAllowedAreas(Qt::TopToolBarArea);
 	this->addToolBar(Qt::TopToolBarArea, this->mainToolbar);
 
-	// ÒıÇæÖ´ºì
+	// å¼•æ“æ‰§çº¢
 	this->tbtnEnginePlayRed = new QToolButton(this);
 	this->tbtnEnginePlayRed->setCheckable(true);
 	this->tbtnEnginePlayRed->setObjectName(QStringLiteral("EnginePlayRed"));
 	QIcon iconEnginePlayRed;
 	iconEnginePlayRed.addFile(QStringLiteral(":/icon/computer_84314.png"), QSize(), QIcon::Normal, QIcon::Off);
 	this->tbtnEnginePlayRed->setIcon(iconEnginePlayRed);
-	this->tbtnEnginePlayRed->setToolTip("µçÄÔÖ´ºì×ßÆå");
+	this->tbtnEnginePlayRed->setToolTip("ç”µè„‘æ‰§çº¢èµ°æ£‹");
 	this->mainToolbar->addWidget(this->tbtnEnginePlayRed);
 	connect(this->tbtnEnginePlayRed, SIGNAL(toggled(bool)), this, SLOT(onPlayRedToggled(bool)));
 
-	// ÒıÇæÖ´ºÚ
+	// å¼•æ“æ‰§é»‘
 	this->tbtnEnginePlayBlack = new QToolButton(this);
 	this->tbtnEnginePlayBlack->setCheckable(true);
 	this->tbtnEnginePlayBlack->setObjectName(QStringLiteral("EnginePlayBlack"));
 	QIcon iconEnginePlayBlack;
 	iconEnginePlayBlack.addFile(QStringLiteral(":/icon/computer_123003.png"), QSize(), QIcon::Normal, QIcon::Off);
 	this->tbtnEnginePlayBlack->setIcon(iconEnginePlayBlack);
-	this->tbtnEnginePlayBlack->setToolTip("µçÄÔÖ´ºÚ×ßÆå");
+	this->tbtnEnginePlayBlack->setToolTip("ç”µè„‘æ‰§é»‘èµ°æ£‹");
 	this->mainToolbar->addWidget(this->tbtnEnginePlayBlack);
 	connect(this->tbtnEnginePlayBlack, SIGNAL(toggled(bool)), this, SLOT(onPlayBlackToggled(bool)));
 
-	// ÈÃÒıÇæÁ¢¼´³ö²½
+	// è®©å¼•æ“ç«‹å³å‡ºæ­¥
 	this->actEngineStop = new QAction(this);
 	this->actEngineStop->setObjectName(QStringLiteral("EngineStop"));
 	QIcon iconEngineStop;
 	iconEngineStop.addFile(QStringLiteral(":/icon/stop.ico"),
 		QSize(), QIcon::Normal, QIcon::Off);
 	this->actEngineStop->setIcon(iconEngineStop);
-	this->actEngineStop->setText("Á¢¼´³ö²½");
-    this->actEngineStop->setToolTip("ÈÃÒıÇæÁ¢¼´³ö²½");
+	this->actEngineStop->setText("ç«‹å³å‡ºæ­¥");
+    this->actEngineStop->setToolTip("è®©å¼•æ“ç«‹å³å‡ºæ­¥");
 	this->mainToolbar->addAction(this->actEngineStop);
 
-	// Á¬½ÓÆäËüÆåÅÌ£¬ºì·½×ßÆå
+	// è¿æ¥å…¶å®ƒæ£‹ç›˜ï¼Œçº¢æ–¹èµ°æ£‹
 	this->tbtnLinkChessBoardRed = new QToolButton(this);
 	this->tbtnLinkChessBoardRed->setCheckable(true);
 	this->tbtnLinkChessBoardRed->setObjectName(QStringLiteral("LinkChessBoardRed"));
@@ -430,15 +428,15 @@ void MainWindow::createToolBars()
 	iconLinkChessBoardRed.addFile(QStringLiteral(":/icon/RedLink.png"),
 		QSize(), QIcon::Normal, QIcon::Off);
 	this->tbtnLinkChessBoardRed->setIcon(iconLinkChessBoardRed);
-	this->tbtnLinkChessBoardRed->setText("ºì·½Á¬Ïß");
-	this->tbtnLinkChessBoardRed->setToolTip("Á¬½ÓÆäËüÆåÅÌ, ÎÒ·½Ö´ºì");
+	this->tbtnLinkChessBoardRed->setText("çº¢æ–¹è¿çº¿");
+	this->tbtnLinkChessBoardRed->setToolTip("è¿æ¥å…¶å®ƒæ£‹ç›˜, æˆ‘æ–¹æ‰§çº¢");
 	this->mainToolbar->addWidget(this->tbtnLinkChessBoardRed);
 	connect(this->tbtnLinkChessBoardRed, SIGNAL(toggled(bool)), this, SLOT(onLinkRedToggled(bool)));
 
 
 	//onLinkRedToggled
 
-	// Á¬½ÓÆäËüÆåÅÌ£¬ºÚ·½×ßÆå
+	// è¿æ¥å…¶å®ƒæ£‹ç›˜ï¼Œé»‘æ–¹èµ°æ£‹
 	this->tbtnLinkChessBoardBlack = new QToolButton(this);
 	this->tbtnLinkChessBoardBlack->setCheckable(true);
 	this->tbtnLinkChessBoardBlack->setObjectName(QStringLiteral("LinkChessBoardBlack"));
@@ -446,76 +444,19 @@ void MainWindow::createToolBars()
 	iconLinkChessBoardBlack.addFile(QStringLiteral(":/icon/BlackLink.png"),
 		QSize(), QIcon::Normal, QIcon::Off);
 	this->tbtnLinkChessBoardBlack->setIcon(iconLinkChessBoardBlack);
-	this->tbtnLinkChessBoardBlack->setText("ºì·½Á¬Ïß");
-	this->tbtnLinkChessBoardBlack->setToolTip("Á¬½ÓÆäËüÆåÅÌ, ÎÒ·½Ö´ºÚ");
+	this->tbtnLinkChessBoardBlack->setText("çº¢æ–¹è¿çº¿");
+	this->tbtnLinkChessBoardBlack->setToolTip("è¿æ¥å…¶å®ƒæ£‹ç›˜, æˆ‘æ–¹æ‰§é»‘");
 	this->mainToolbar->addWidget(this->tbtnLinkChessBoardBlack);
 	connect(this->tbtnLinkChessBoardBlack, SIGNAL(toggled(bool)), this, SLOT(onLinkBlackToggled(bool)));
 
 
 
-	//QAction* actLinkChessBoardRed;      // Á¬½ÓÆäËüÆåÅÌ
-	//QAction* actLinkChessBoardBlack;    // Á¬½ÓÆäËüÆåÅÌ
-
-	//// Á¬½ÓÆäËüÆåÅÌ
-	//this->actLinkChessBoard = new QAction(this);
-	//this->actLinkChessBoard->setObjectName(QStringLiteral("LinkChessBoard"));
-	//QIcon iconLinkChessBoard;
-	//iconLinkChessBoard.addFile(QStringLiteral(":/icon/Links.ico"),
-	//	QSize(), QIcon::Normal, QIcon::Off);
-	//this->actLinkChessBoard->setIcon(iconLinkChessBoard);
-	//this->actLinkChessBoard->setText("Á¬Ïß");
-	//this->actLinkChessBoard->setToolTip("Á¬½ÓÆäËüÆåÅÌ");
-
-	//// ÈÃÒıÇæË¼¿¼
-	//this->actEngineThink = new QAction(this);
-	//this->actEngineThink->setObjectName(QStringLiteral("EngineThink"));
-	//QIcon iconEngineThink;
-	//iconEngineThink.addFile(QStringLiteral(":/icon/thought-balloon.ico"),
-	//	QSize(), QIcon::Normal, QIcon::Off);
-	//this->actEngineThink->setIcon(iconEngineThink);
-	//this->actEngineThink->setText("Ë¼¿¼");
-	//this->actEngineThink->setToolTip("ÈÃÒıÇæË¼¿¼µ±Ç°Æå¾Ö£¬²¢×Ô¶¯×ßÆå");
-
-	//// ÈÃÒıÇæ·ÖÎö
-	//this->actEngineAnalyze = new QAction(this);
-	//this->actEngineAnalyze->setObjectName(QStringLiteral("EngineAnalyze"));
-	//QIcon iconEngineAnalyze;
-	//iconEngineAnalyze.addFile(QStringLiteral(":/icon/analyze.ico"),
-	//	QSize(), QIcon::Normal, QIcon::Off);
-	//this->actEngineAnalyze->setIcon(iconEngineAnalyze);
-	//this->actEngineAnalyze->setText("·ÖÎö");
-	//this->actEngineAnalyze->setToolTip("ÈÃÒıÇæ·ÖÎöµ±Ç°Æå¾Ö");
-
-	
-
-	//// ÒıÇæÉèÖÃ
-	//this->actEngineSetting = new QAction(this);
-	//this->actEngineSetting->setObjectName(QStringLiteral("EngineSetting"));
-	//QIcon iconEngineSetting;
-	//iconEngineSetting.addFile(QStringLiteral(":/icon/Settings.ico"),
-	//	QSize(), QIcon::Normal, QIcon::Off);
-	//this->actEngineSetting->setIcon(iconEngineSetting);
-	//this->actEngineSetting->setText("ÉèÖÃ");
-	//this->actEngineSetting->setToolTip("ÉèÖÃÒıÇæ²ÎÊı");
-
-	//this->mainToolbar->addAction(this->actLinkChessBoard);
-	//this->mainToolbar->addAction(this->actEngineThink);
-	//this->mainToolbar->addAction(this->actEngineAnalyze);
-	//this->mainToolbar->addAction(this->actEngineStop);   
-	//this->mainToolbar->addAction(this->actEngineSetting);   
-
-
-	//connect(this->actLinkChessBoard, &QAction::triggered, this, &MainWindow::onLXchessboard);
-
-
-	//connect(m_tabBar, SIGNAL(currentChanged(int)),
-	//	this, SLOT(onTabChanged(int)));
 }
 
 void MainWindow::createDockWindows()
 {
 	// Engine debug
-	QDockWidget* engineDebugDock = new QDockWidget(tr("ÒıÇæµ÷ÊÔ"), this);
+	QDockWidget* engineDebugDock = new QDockWidget(tr("å¼•æ“è°ƒè¯•"), this);
 	engineDebugDock->setObjectName("EngineDebugDock");
 	m_engineDebugLog = new PlainTextLog(engineDebugDock);
 	engineDebugDock->setWidget(m_engineDebugLog);
@@ -523,23 +464,23 @@ void MainWindow::createDockWindows()
 	addDockWidget(Qt::BottomDockWidgetArea, engineDebugDock);
 
 	// Evaluation history
-	auto evalHistoryDock = new QDockWidget(tr("ÀúÊ·ÆÀ¹ÀÇúÏß"), this);
+	auto evalHistoryDock = new QDockWidget(tr("å†å²è¯„ä¼°æ›²çº¿"), this);
 	evalHistoryDock->setObjectName("EvalHistoryDock");
 	evalHistoryDock->setWidget(m_evalHistory);
 	addDockWidget(Qt::BottomDockWidgetArea, evalHistoryDock);
 
 	// Players' eval widgets
-	auto whiteEvalDock = new QDockWidget(tr("ºì·½ÆÀ·Ö"), this);
+	auto whiteEvalDock = new QDockWidget(tr("çº¢æ–¹è¯„åˆ†"), this);
 	whiteEvalDock->setObjectName("WhiteEvalDock");
 	whiteEvalDock->setWidget(m_evalWidgets[Chess::Side::White]);
 	addDockWidget(Qt::RightDockWidgetArea, whiteEvalDock);
-	auto blackEvalDock = new QDockWidget(tr("ºÚ·½ÆÀ·Ö"), this);
+	auto blackEvalDock = new QDockWidget(tr("é»‘æ–¹è¯„åˆ†"), this);
 	blackEvalDock->setObjectName("BlackEvalDock");
 	blackEvalDock->setWidget(m_evalWidgets[Chess::Side::Black]);
 	addDockWidget(Qt::RightDockWidgetArea, blackEvalDock);
 
 	// Move list
-	QDockWidget* moveListDock = new QDockWidget(tr("ÆåÆ×"), this);
+	QDockWidget* moveListDock = new QDockWidget(tr("æ£‹è°±"), this);
 	moveListDock->setObjectName("MoveListDock");
 	moveListDock->setWidget(m_moveList);
 	addDockWidget(Qt::RightDockWidgetArea, moveListDock);
@@ -547,7 +488,7 @@ void MainWindow::createDockWindows()
 	splitDockWidget(whiteEvalDock, blackEvalDock, Qt::Vertical);
 
 	// Tags
-	QDockWidget* tagsDock = new QDockWidget(tr("±êÇ©"), this);
+	QDockWidget* tagsDock = new QDockWidget(tr("æ ‡ç­¾"), this);
 	tagsDock->setObjectName("TagsDock");
 	QTreeView* tagsView = new QTreeView(tagsDock);
 	tagsView->setModel(m_tagsModel);
@@ -603,9 +544,12 @@ void MainWindow::writeSettings()
 void MainWindow::addGame(ChessGame* game)
 {
 	Tournament* tournament = qobject_cast<Tournament*>(QObject::sender());
+#ifdef QTGG_CAPTURE
 	Chess::Capture* pcap = new Chess::Capture(game, this);
-
-	TabData tab(game,  pcap, tournament);
+	TabData tab(game, pcap, tournament);
+#else
+	TabData tab(game, tournament);
+#endif
 
 
 	if (tournament)
@@ -679,7 +623,9 @@ void MainWindow::destroyGame(ChessGame* game)
 	delete tab.m_pgn;
 
 	// 
+#ifdef QTGG_CAPTURE
 	delete tab.m_cap;
+#endif
 
 	if (m_tabs.isEmpty())
 		close();
@@ -849,8 +795,8 @@ void MainWindow::onTabCloseRequested(int index)
 
 	if (tab.m_tournament && tab.m_game)
 	{
-		auto btn = QMessageBox::question(this, tr("½áÊø½õ±êÈü"),
-			   tr("ÄúÕæµÄÒªÍ£Ö¹µ±Ç°½õ±êÈüÂğ?"));
+		auto btn = QMessageBox::question(this, tr("ç»“æŸé”¦æ ‡èµ›"),
+			   tr("æ‚¨çœŸçš„è¦åœæ­¢å½“å‰é”¦æ ‡èµ›å—?"));
 		if (btn != QMessageBox::Yes)
 			return;
 	}
@@ -894,7 +840,7 @@ void MainWindow::editBoard() {
 		return;
 
 	QString fen = dlgEditBoard.fenString();
-	qDebug() << "±à¼­fen: " << fen;
+	qDebug() << "ç¼–è¾‘fen: " << fen;
 
 	QString variant = m_game.isNull() || m_game->board() == nullptr ?
 		"standard" : m_game->board()->variant();
@@ -916,11 +862,11 @@ void MainWindow::editBoard() {
 		new HumanBuilder(CuteChessApplication::userName()));
 }
 
-void MainWindow::newGame()  // ĞÂ½¨Ò»¾ÖÓÎÏ·
+void MainWindow::newGame()  // æ–°å»ºä¸€å±€æ¸¸æˆ
 {
 	EngineManager* engineManager = CuteChessApplication::instance()->engineManager();
 	NewGameDialog dlg(engineManager, this);
-	if (dlg.exec() != QDialog::Accepted)             // Èç¹ûÊÇÈ¡Ïû
+	if (dlg.exec() != QDialog::Accepted)             // å¦‚æœæ˜¯å–æ¶ˆ
 		return;
 
 	auto game = dlg.createGame();
@@ -945,7 +891,7 @@ void MainWindow::newGame()  // ĞÂ½¨Ò»¾ÖÓÎÏ·
 		this, SLOT(addGame(ChessGame*)));
 	connect(game, SIGNAL(startFailed(ChessGame*)),
 		this, SLOT(onGameStartFailed(ChessGame*)));
-	CuteChessApplication::instance()->gameManager()->newGame(game,             // ½«Õâ¸öĞÂÆå¾ÖÌí¼Óµ½Tab±íÖĞ
+	CuteChessApplication::instance()->gameManager()->newGame(game,             // å°†è¿™ä¸ªæ–°æ£‹å±€æ·»åŠ åˆ°Tabè¡¨ä¸­
 		builders[Chess::Side::White], builders[Chess::Side::Black]);
 }
 
@@ -993,22 +939,22 @@ void MainWindow::OpenPgnGame()
 {
 	
 	QString filePGN = QFileDialog::getOpenFileName(this,
-		"´ò¿ª PGN ¸ñÊ½µÄÆå¾Ö",
+		"æ‰“å¼€ PGN æ ¼å¼çš„æ£‹å±€",
 		QString(),
-		tr("PGN ¸ñÊ½ (*.pgn);;All Files (*.*)"));
+		tr("PGN æ ¼å¼ (*.pgn);;All Files (*.*)"));
 	
 
 	QFile file(filePGN);
 	QFileInfo fileInfo(filePGN);
 	if (!fileInfo.exists())
 	{
-		QMessageBox::information(this, "³ö´íÁË", "PGN ÎÄ¼ş²»´æÔÚ£¡");
+		QMessageBox::information(this, "å‡ºé”™äº†", "PGN æ–‡ä»¶ä¸å­˜åœ¨ï¼");
 		return;
 	}
 
 	if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
 	{
-		QMessageBox::information(this, "³ö´íÁË", "PGN ²»ÄÜÕı³£´ò¿ª£¡");
+		QMessageBox::information(this, "å‡ºé”™äº†", "PGN ä¸èƒ½æ­£å¸¸æ‰“å¼€ï¼");
 		return;
 	}
 
@@ -1277,64 +1223,20 @@ void MainWindow::pasteFen()
 		new HumanBuilder(CuteChessApplication::userName()));
 }
 
-//void MainWindow::msgFen(QString fen)
-//{
-//	//auto cb = CuteChessApplication::clipboard();
-//	//if (cb->text().isEmpty())
-//	//	return;
-//
-//	//QString fen = cb->text().trimmed();
-//	QStringList stFList = fen.split("fen");		// by LGL
-//	if (stFList.length() > 1) {
-//		fen = stFList[1].trimmed();
-//	}
-//
-//	QString variant = m_game.isNull() || m_game->board() == nullptr ?
-//		"standard" : m_game->board()->variant();
-//
-//	auto board = Chess::BoardFactory::create(variant);
-//	if (!board->setFenString(fen))
-//	{
-//		QMessageBox msgBox(QMessageBox::Critical,
-//			tr("FEN error"),
-//			tr("Invalid FEN string for the \"%1\" variant:")
-//			.arg(variant),
-//			QMessageBox::Ok, this);
-//		msgBox.setInformativeText(fen);
-//		msgBox.exec();
-//
-//		delete board;
-//		return;
-//	}
-//
-//	//board->legalMoves();
-//
-//	auto game = new ChessGame(board, new PgnGame());
-//	game->setTimeControl(TimeControl("inf"));
-//	game->setStartingFen(fen);
-//	game->pause();
-//
-//	connect(game, &ChessGame::initialized, this, &MainWindow::addGame);
-//	connect(game, &ChessGame::startFailed, this, &MainWindow::onGameStartFailed);
-//
-//	CuteChessApplication::instance()->gameManager()->newGame(game,
-//		new HumanBuilder(CuteChessApplication::userName()),
-//		new HumanBuilder(CuteChessApplication::userName()));
-//}
 
 void MainWindow::showAboutDialog()
 {
 	QString html;
-	html += "<h3>" + QString("¼Ñ¼Ñ½çÃæ %1")
+	html += "<h3>" + QString("ä½³ä½³ç•Œé¢ %1")
 		.arg(CuteChessApplication::applicationVersion()) + "</h3>";
-	html += "<p>" + tr("Qt °æ±¾ %1").arg(qVersion()) + "</p>";
-	html += "<p>" + tr("°æ±¾ËùÓĞ 2019-2020 ") + "</p>";
-	html += "<p>" + tr("×÷Õß Lee David") + "</p>";
-	html += "<p>" + tr("¸ĞĞ»ÄúÊ¹ÓÃ¼Ñ¼ÑÏóÆå½çÃæ") + "</p>";
-	html += "<a href=\"http://www.ggzero.cn\">¹Ù·½ÍøÕ¾</a><br>";
-	html += "<a href=\"http://bbs.ggzero.cn\">¹Ù·½ÂÛÌ³</a><br>";
-	html += "<a href=\"https://jq.qq.com/?_wv=1027&k=5FxO79E\">¼ÓÈëQQÈº</a><br>";
-	QMessageBox::about(this, tr("¹ØÓÚ¼Ñ¼Ñ½çÃæ"), html);
+	html += "<p>" + tr("Qt ç‰ˆæœ¬ %1").arg(qVersion()) + "</p>";
+	html += "<p>" + tr("ç‰ˆæœ¬æ‰€æœ‰ 2019-2020 ") + "</p>";
+	html += "<p>" + tr("ä½œè€… Lee David") + "</p>";
+	html += "<p>" + tr("æ„Ÿè°¢æ‚¨ä½¿ç”¨ä½³ä½³è±¡æ£‹ç•Œé¢") + "</p>";
+	html += "<a href=\"http://www.ggzero.cn\">å®˜æ–¹ç½‘ç«™</a><br>";
+	html += "<a href=\"http://bbs.ggzero.cn\">å®˜æ–¹è®ºå›</a><br>";
+	html += "<a href=\"https://jq.qq.com/?_wv=1027&k=5FxO79E\">åŠ å…¥QQç¾¤</a><br>";
+	QMessageBox::about(this, tr("å…³äºä½³ä½³ç•Œé¢"), html);
 
 
 	// https://jq.qq.com/?_wv=1027&k=5FxO79E
@@ -1365,9 +1267,9 @@ bool MainWindow::saveAs()
 {
 	const QString fileName = QFileDialog::getSaveFileName(
 		this,
-		tr("±£´æ¶Ô¾Ö"),
+		tr("ä¿å­˜å¯¹å±€"),
 		QString(),
-		tr("PGN ¸ñÊ½ (*.pgn);;All Files (*.*)"),
+		tr("PGN æ ¼å¼ (*.pgn);;All Files (*.*)"),
 		nullptr,
 		QFileDialog::DontConfirmOverwrite);
 	if (fileName.isEmpty())
@@ -1449,7 +1351,7 @@ bool MainWindow::askToSave()
 	{
 		QMessageBox::StandardButton result;
 		result = QMessageBox::warning(this, QApplication::applicationName(),
-			tr("¶Ô¾ÖÒÑÓĞ±ä¶¯.\nÄãÒª±£´æÂğ?"),
+			tr("å¯¹å±€å·²æœ‰å˜åŠ¨.\nä½ è¦ä¿å­˜å—?"),
 				QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
 
 		if (result == QMessageBox::Save)
@@ -1482,7 +1384,7 @@ void MainWindow::adjudicateGame(Chess::Side winner)
 
 	auto result = Chess::Result(Chess::Result::Adjudication,
 				    winner,
-				    tr("ÓÃ»§²Ã¾ö"));
+				    tr("ç”¨æˆ·è£å†³"));
 	QMetaObject::invokeMethod(m_game, "onAdjudication",
 				  Qt::QueuedConnection,
 				  Q_ARG(Chess::Result, result));
@@ -1508,9 +1410,10 @@ void MainWindow::resignGame()
 				  Q_ARG(Chess::Result, result));
 }
 
+#ifdef QTGG_CAPTURE
 void MainWindow::processCapMsg(stCaptureMsg msg)
 {
-	// µÃµ½µ±Ç°µÄÓÎÏ·£¿²»ÊÇ£¬Ó¦¸ÃµÃµ½µ±Ç°µÄchessgame
+	// å¾—åˆ°å½“å‰çš„æ¸¸æˆï¼Ÿä¸æ˜¯ï¼Œåº”è¯¥å¾—åˆ°å½“å‰çš„chessgame
 	
 	switch (msg.mType) {
 	case stCaptureMsg::eText:
@@ -1522,22 +1425,22 @@ void MainWindow::processCapMsg(stCaptureMsg msg)
 	case stCaptureMsg::eSetFen: 
 	{
 		//msg.pGame->stop(false);
-		//msg.pGame->board()->setFenString(msg.text);                  // Ò»¹²¶ş¸öboard ChessGame, GameViewer
+		//msg.pGame->board()->setFenString(msg.text);                  // ä¸€å…±äºŒä¸ªboard ChessGame, GameViewer
 		//this->m_gameViewer->viewPreviousMove2(msg.pGame->board());
 
 		//QString fen = msg.text;
 
 		QString fen = "2bakab2/9/9/8R/pnpNP4/3r5/c3c4/1C2B2C1/4A4/2BAK4 w - - 0 1";
 
-		if (m_onLinkRedToggled || m_onLinkBlackToggled) {  // ºì·½Á¬Ïß×ßÆå
+		if (m_onLinkRedToggled || m_onLinkBlackToggled) {  // çº¢æ–¹è¿çº¿èµ°æ£‹
 			bool ok = true;
 
-			// µÃµ½µ±Ç°µÄÉèÖÃ
+			// å¾—åˆ°å½“å‰çš„è®¾ç½®
 			QSettings s;
 
 			s.beginGroup("games");
 			//const QString variant1 = s.value("variant").toString();
-			const QString variant = "standard"; // s.value("variant").toString();    // ÓÎÏ·ÀàĞÍ
+			const QString variant = "standard"; // s.value("variant").toString();    // æ¸¸æˆç±»å‹
 
 			auto board = Chess::BoardFactory::create(variant);
 
@@ -1563,12 +1466,12 @@ void MainWindow::processCapMsg(stCaptureMsg msg)
 			game->setStartingFen(fen);
 			//this->m_gameViewer->viewPreviousMove2(game->board());  //
 
-			// Ê±¼ä¿ØÖÆ
+			// æ—¶é—´æ§åˆ¶
 			TimeControl m_timeControl;
 			m_timeControl.readSettings(&s);
 			game->setTimeControl(m_timeControl);
 
-			// ²Ã¶¨ÉèÖÃ
+			// è£å®šè®¾ç½®
 			s.beginGroup("draw_adjudication");
 			GameAdjudicator m_adjudicator;
 			m_adjudicator.setDrawThreshold(s.value("move_number").toInt(),
@@ -1577,7 +1480,7 @@ void MainWindow::processCapMsg(stCaptureMsg msg)
 			s.endGroup();
 			game->setAdjudicator(m_adjudicator);
 
-			//auto suite = ui->m_gameSettings->openingSuite();          // ¿ª¾Ö³õÊ¼¾ÖÃæÉè¶¨
+			//auto suite = ui->m_gameSettings->openingSuite();          // å¼€å±€åˆå§‹å±€é¢è®¾å®š
 			//if (suite)
 			//{
 			//	int depth = ui->m_gameSettings->openingSuiteDepth();
@@ -1587,7 +1490,7 @@ void MainWindow::processCapMsg(stCaptureMsg msg)
 
 
 
-			//auto book = ui->m_gameSettings->openingBook();           // ¿ª¾Ö¿â
+			//auto book = ui->m_gameSettings->openingBook();           // å¼€å±€åº“
 			//if (book)
 			//{
 			//	int depth = ui->m_gameSettings->bookDepth();
@@ -1614,7 +1517,7 @@ void MainWindow::processCapMsg(stCaptureMsg msg)
 
 			//auto game = this->m_game;
 
-			game->isGetSetting = true;    // Æå¾ÖÒÑÉèÖÃºÃÁË
+			game->isGetSetting = true;    // æ£‹å±€å·²è®¾ç½®å¥½äº†
 
 
 			//bool isWhiteCPU = (side == Chess::Side::White);
@@ -1630,14 +1533,14 @@ void MainWindow::processCapMsg(stCaptureMsg msg)
 				game->pause();
 
 
-			m_myClosePreTab = true; // ¹ØÁËÇ°Ò»¸ö´°¿Ú
+			m_myClosePreTab = true; // å…³äº†å‰ä¸€ä¸ªçª—å£
 
 			// Start the game in a new tab
 			connect(game, SIGNAL(initialized(ChessGame*)),
 				this, SLOT(addGame(ChessGame*)));
 			connect(game, SIGNAL(startFailed(ChessGame*)),
 				this, SLOT(onGameStartFailed(ChessGame*)));
-			CuteChessApplication::instance()->gameManager()->newGame(game,             // ½«Õâ¸öĞÂÆå¾ÖÌí¼Óµ½Tab±íÖĞ
+			CuteChessApplication::instance()->gameManager()->newGame(game,             // å°†è¿™ä¸ªæ–°æ£‹å±€æ·»åŠ åˆ°Tabè¡¨ä¸­
 				builders[Chess::Side::White], builders[Chess::Side::Black]);
 		}
 		
@@ -1648,6 +1551,7 @@ void MainWindow::processCapMsg(stCaptureMsg msg)
 		break;
 	}
 }
+#endif
 
 void MainWindow::onLXchessboardStart()
 {
@@ -1662,10 +1566,10 @@ void MainWindow::onLXchessboardStart()
 	//iconLinkChessBoard.addFile(QStringLiteral(":/icon/Links.ico"),
 	//	QSize(), QIcon::Normal, QIcon::Off);
 	//this->actLinkChessBoard->setIcon(iconLinkChessBoard);
-	//this->actLinkChessBoard->setText("Á¬Ïß");
-	//this->actLinkChessBoard->setToolTip("Á¬½ÓÆäËüÆåÅÌ");
+	//this->actLinkChessBoard->setText("è¿çº¿");
+	//this->actLinkChessBoard->setToolTip("è¿æ¥å…¶å®ƒæ£‹ç›˜");
 
-	// ÈÃÒıÇæË¼¿¼
+	// è®©å¼•æ“æ€è€ƒ
 	//this->actEngineThink = new QAction(this);
 	//this->actEngineThink->setObjectName(QStringLiteral("EngineThink"));
 	//QIcon iconEngineThink;
@@ -1674,16 +1578,18 @@ void MainWindow::onLXchessboardStart()
 	//this->actLinkChessBoard->setIcon(iconEngineThink);
 
 	//this->actEngineThink->setIcon(iconEngineThink);
-	//this->actEngineThink->setText("Ë¼¿¼");
-	//this->actEngineThink->setToolTip("ÈÃÒıÇæË¼¿¼µ±Ç°Æå¾Ö£¬²¢×Ô¶¯×ßÆå");
+	//this->actEngineThink->setText("æ€è€ƒ");
+	//this->actEngineThink->setToolTip("è®©å¼•æ“æ€è€ƒå½“å‰æ£‹å±€ï¼Œå¹¶è‡ªåŠ¨èµ°æ£‹");
 
 
 
 
+#ifdef QTGG_CAPTURE
 	Chess::Capture* pcap = m_tabs.at(m_tabBar->currentIndex()).m_cap;
 	pcap->on_start();
+#endif
 
-	// »»Ò»¸öÍ¼±ê
+	// æ¢ä¸€ä¸ªå›¾æ ‡
 
 
 	//if (pcap->getChessboardHwnd()) {
@@ -1694,8 +1600,10 @@ void MainWindow::onLXchessboardStart()
 
 void MainWindow::onLXchessboardStop()
 {
+#ifdef QTGG_CAPTURE
 	Chess::Capture* pcap = m_tabs.at(m_tabBar->currentIndex()).m_cap;
 	pcap->on_stop();
+#endif
 
 	m_game->stop(); 
 }
@@ -1717,7 +1625,7 @@ PlayerBuilder* MainWindow::mainCreatePlayerBuilder(Chess::Side side, bool isCPU)
 
 		bool ponder = s.value("pondering").toBool();
 		config.setPondering(ponder);
-		// ÊÇ·ñÒªºóÌ¨Ë¼¿¼
+		// æ˜¯å¦è¦åå°æ€è€ƒ
 		// ui->m_gameSettings->applyEngineConfiguration(&config);
 
 		s.endGroup();
@@ -1731,7 +1639,7 @@ PlayerBuilder* MainWindow::mainCreatePlayerBuilder(Chess::Side side, bool isCPU)
 }
 
 
-// ºì·½µçÄÔË¼¿¼°´Å¥
+// çº¢æ–¹ç”µè„‘æ€è€ƒæŒ‰é’®
 void MainWindow::onPlayRedToggled(bool checked) {
 
 	m_onPlayRedToggled = checked;	
@@ -1739,7 +1647,7 @@ void MainWindow::onPlayRedToggled(bool checked) {
 	this->onPlayWhich(checked);  //  , Chess::Side::White);
 }
 
-// ºÚ·½µçÄÔË¼¿¼°´Å¥
+// é»‘æ–¹ç”µè„‘æ€è€ƒæŒ‰é’®
 void MainWindow::onPlayBlackToggled(bool checked) {
 
 	m_onPlayBlackToggled = checked;
@@ -1772,12 +1680,12 @@ void MainWindow::onPlayWhich(bool checked) //, Chess::Side side)
 			//EngineManager* engineManager = CuteChessApplication::instance()->engineManager();			
 			bool ok = true;
 
-			// µÃµ½µ±Ç°µÄÉèÖÃ
+			// å¾—åˆ°å½“å‰çš„è®¾ç½®
 			QSettings s;
 
 			s.beginGroup("games");
 			//const QString variant1 = s.value("variant").toString();
-			const QString variant = "standard"; // s.value("variant").toString();    // ÓÎÏ·ÀàĞÍ
+			const QString variant = "standard"; // s.value("variant").toString();    // æ¸¸æˆç±»å‹
 
 			auto board = Chess::BoardFactory::create(variant);
 
@@ -1800,12 +1708,12 @@ void MainWindow::onPlayWhich(bool checked) //, Chess::Side side)
 
 			game->setStartingFen(fen);
 
-			// Ê±¼ä¿ØÖÆ
+			// æ—¶é—´æ§åˆ¶
 			TimeControl m_timeControl;
 			m_timeControl.readSettings(&s);
 			game->setTimeControl(m_timeControl);
 
-			// ²Ã¶¨ÉèÖÃ
+			// è£å®šè®¾ç½®
 			s.beginGroup("draw_adjudication");
 			GameAdjudicator m_adjudicator;
 			m_adjudicator.setDrawThreshold(s.value("move_number").toInt(),
@@ -1814,7 +1722,7 @@ void MainWindow::onPlayWhich(bool checked) //, Chess::Side side)
 			s.endGroup();
 			game->setAdjudicator(m_adjudicator);
 
-			//auto suite = ui->m_gameSettings->openingSuite();          // ¿ª¾Ö³õÊ¼¾ÖÃæÉè¶¨
+			//auto suite = ui->m_gameSettings->openingSuite();          // å¼€å±€åˆå§‹å±€é¢è®¾å®š
 			//if (suite)
 			//{
 			//	int depth = ui->m_gameSettings->openingSuiteDepth();
@@ -1824,7 +1732,7 @@ void MainWindow::onPlayWhich(bool checked) //, Chess::Side side)
 
 			
 
-			//auto book = ui->m_gameSettings->openingBook();           // ¿ª¾Ö¿â
+			//auto book = ui->m_gameSettings->openingBook();           // å¼€å±€åº“
 			//if (book)
 			//{
 			//	int depth = ui->m_gameSettings->bookDepth();
@@ -1851,7 +1759,7 @@ void MainWindow::onPlayWhich(bool checked) //, Chess::Side side)
 
 			//auto game = this->m_game;
 
-			game->isGetSetting = true;    // Æå¾ÖÒÑÉèÖÃºÃÁË
+			game->isGetSetting = true;    // æ£‹å±€å·²è®¾ç½®å¥½äº†
 
 
 			//bool isWhiteCPU = (side == Chess::Side::White);
@@ -1867,14 +1775,14 @@ void MainWindow::onPlayWhich(bool checked) //, Chess::Side side)
 				game->pause();
 
 
-			m_myClosePreTab = true; // ¹ØÁËÇ°Ò»¸ö´°¿Ú
+			m_myClosePreTab = true; // å…³äº†å‰ä¸€ä¸ªçª—å£
 
 			// Start the game in a new tab
 			connect(game, SIGNAL(initialized(ChessGame*)),
 				this, SLOT(addGame(ChessGame*)));
 			connect(game, SIGNAL(startFailed(ChessGame*)),
 				this, SLOT(onGameStartFailed(ChessGame*)));
-			CuteChessApplication::instance()->gameManager()->newGame(game,             // ½«Õâ¸öĞÂÆå¾ÖÌí¼Óµ½Tab±íÖĞ
+			CuteChessApplication::instance()->gameManager()->newGame(game,             // å°†è¿™ä¸ªæ–°æ£‹å±€æ·»åŠ åˆ°Tabè¡¨ä¸­
 				builders[Chess::Side::White], builders[Chess::Side::Black]);
 
 			//if (m_tabs.size() >= 2) {
@@ -1883,7 +1791,7 @@ void MainWindow::onPlayWhich(bool checked) //, Chess::Side side)
 
 		//}
 	}
-	else { // Í£Ö¹×ßÆå
+	else { // åœæ­¢èµ°æ£‹
 	    // destroyGame(m_game);
 		// this->m_game->isGetSetting = false;
 		//resignGame();
@@ -1917,7 +1825,7 @@ void MainWindow::onLinkBlackToggled(bool checked)
 void MainWindow::onLinkWhich(bool checked)
 {
 	if (checked) {
-		onLXchessboardStart();  // ¿ªÊ¼Á¬Ïß
+		onLXchessboardStart();  // å¼€å§‹è¿çº¿
 	}
 	else {
 		onLXchessboardStop();

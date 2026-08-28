@@ -1,4 +1,4 @@
-/*
+﻿/*
     This file is part of Cute Chess.
     Copyright (C) 2008-2018 Cute Chess authors
 
@@ -17,7 +17,6 @@
 */
 
 #include "enginefactory.h"
-#include "xboardengine.h"
 #include "uciengine.h"
 
 

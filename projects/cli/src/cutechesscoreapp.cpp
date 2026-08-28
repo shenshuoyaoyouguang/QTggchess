@@ -1,4 +1,4 @@
-/*
+﻿/*
     This file is part of Cute Chess.
 
     Cute Chess is free software: you can redistribute it and/or modify
@@ -20,10 +20,9 @@
 #include <QTime>
 #include <QFileInfo>
 #include <QDir>
-#include <mersenne.h>
+#include <QRandomGenerator>
 #include <enginemanager.h>
 #include <gamemanager.h>
-#include <board/syzygytablebase.h>
 #include <cstdlib>
 #include <cstdio>
 
@@ -33,7 +32,7 @@ CuteChessCoreApplication::CuteChessCoreApplication(int& argc, char* argv[])
 	  m_engineManager(nullptr),
 	  m_gameManager(nullptr)
 {
-	Mersenne::initialize(QTime(0,0,0).msecsTo(QTime::currentTime()));
+	QRandomGenerator::global()->seed(QTime(0,0,0).msecsTo(QTime::currentTime()));
 
 	QCoreApplication::setOrganizationName(QLatin1String("GGZero_Team"));
 	QCoreApplication::setOrganizationDomain(QLatin1String("ggzero.cn"));

@@ -1,4 +1,4 @@
-/*
+ï»¿/*
     This file is part of Cute Chess.
     Copyright (C) 2008-2018 Cute Chess authors
 
@@ -23,7 +23,7 @@
 #include <QtDebug>
 #include "pgngame.h"
 #include "pgnstream.h"
-#include "mersenne.h"
+#include <QRandomGenerator>
 
 //#include "ConnectionPool.h"
 //#include "databasemanager.h"
@@ -62,7 +62,7 @@ OpeningBook::~OpeningBook()
 
 QString getRandomString(int length)
 {
-	qsrand(QDateTime::currentMSecsSinceEpoch());//ÎªËæ»úÖµÉè¶¨Ò»¸öseed
+	qsrand(QDateTime::currentMSecsSinceEpoch());//ä¸ºéšæœºå€¼è®¾å®šä¸€ä¸ªseed
 
 	const char chrs[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 	int chrs_size = sizeof(chrs);
@@ -90,7 +90,7 @@ bool OpeningBook::read(const QString& filename)
 	db.setDatabaseName(this->m_filename);
 	
 	if (!db.open()) {
-		qWarning("´ò²»¿ª¿ª¾Ö¿âÎÄ¼ş %s",
+		qWarning("æ‰“ä¸å¼€å¼€å±€åº“æ–‡ä»¶ %s",
 			qUtf8Printable(this->m_filename));
 		return false;
 	}
@@ -188,14 +188,14 @@ QList<OpeningBook::Entry> OpeningBook::entriesFromDisk(quint64 key) const
 	QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", getRandomString(10));
 	db.setDatabaseName(this->m_filename);
 	if (!db.open()) {
-		qWarning("´ò²»¿ª¿ª¾Ö¿âÎÄ¼ş %s",
+		qWarning("æ‰“ä¸å¼€å¼€å±€åº“æ–‡ä»¶ %s",
 			qUtf8Printable(this->m_filename));
 		return entries;
 	}
 
 	QSqlQuery query(db);
 
-	//key = 0x628d04d7c9c144ae;						// ¿ª¾Ö³õÊ¼hash
+	//key = 0x628d04d7c9c144ae;						// å¼€å±€åˆå§‹hash
 	//qint64 ikey = 0xa1ead1f6470e07ee;
 	//quint64 ukey = 0xa1ead1f6470e07ee;
 
@@ -207,7 +207,7 @@ QList<OpeningBook::Entry> OpeningBook::entriesFromDisk(quint64 key) const
 	}
 	else {
 		double dkey;
-		memcpy(&dkey, &key, sizeof(qint64));	// SQlite3 ²»ÈÏ¸ºµÄ uint64 key
+		memcpy(&dkey, &key, sizeof(qint64));	// SQlite3 ä¸è®¤è´Ÿçš„ uint64 key
 		query.bindValue(0, dkey);
 	}
 
@@ -221,7 +221,7 @@ QList<OpeningBook::Entry> OpeningBook::entriesFromDisk(quint64 key) const
 
 			quint32 mbh = query.value("vmove").toInt();
 
-			// Õâ¶ùÒª×ª»»Ò»ÏÂ
+			// è¿™å„¿è¦è½¬æ¢ä¸€ä¸‹
 			int from = mbh >> 8;
 			int to = mbh & 0xff;
 
@@ -245,14 +245,14 @@ QList<OpeningBook::Entry> OpeningBook::entriesFromDisk(quint64 key) const
 			//entry.vindex = query.value("vindex").toInt();
 
 			//if (entry.vscore == 0) {
-			//	entry.vscore = 1;            // ×îĞ¡¸øÒ»¸ö1·Ö£¬·ÀÖ¹³ı0³ö´í
+			//	entry.vscore = 1;            // æœ€å°ç»™ä¸€ä¸ª1åˆ†ï¼Œé˜²æ­¢é™¤0å‡ºé”™
 			//}
 
-			if(entry.vscore > 0 && entry.valid == 1){  // Ö»Ñ¡Ôñ´óÓÚ0·Ö£¬ÇÒÊÇÓĞĞ§µÄÆå²½×ßÆå
+			if(entry.vscore > 0 && entry.valid == 1){  // åªé€‰æ‹©å¤§äº0åˆ†ï¼Œä¸”æ˜¯æœ‰æ•ˆçš„æ£‹æ­¥èµ°æ£‹
 				entries << entry;
 			}
 
-			if (!query.next()) {   // ÒÆ¶¯µ½ÏÂÒ»Ìõ£¬²¢ÅĞ¶ÏÊÇ²»ÊÇµ½Î´Î²ÁË
+			if (!query.next()) {   // ç§»åŠ¨åˆ°ä¸‹ä¸€æ¡ï¼Œå¹¶åˆ¤æ–­æ˜¯ä¸æ˜¯åˆ°æœªå°¾äº†
 				break;
 			}
 		}		
@@ -295,7 +295,7 @@ Chess::GenericMove OpeningBook::move(quint64 key) const
 	// Pick a move randomly, with the highest-weighted move having
 	// the highest probability of getting picked.	
 	if (m_mode == BookRandom) {
-		int pick = Mersenne::random() % totalWeight;	
+		int pick = QRandomGenerator::global()->generate() % totalWeight;	
 		int currentWeight = 0;
 		for (const Entry& entry : entries)
 		{
@@ -306,27 +306,27 @@ Chess::GenericMove OpeningBook::move(quint64 key) const
 	}
 	else {
 		int bestScore = 0;	
-		// 1. ÇóµÃ×î¸ß·Ö
+		// 1. æ±‚å¾—æœ€é«˜åˆ†
 		for (const Entry& entry : entries) {
 			if (entry.vscore >= bestScore) {
 				bestScore = entry.vscore;				
 			}
 		}
-		// 2. ½«È«²¿µÄ×î¸ß·Ö¼¯ÖĞÆğÀ´
+		// 2. å°†å…¨éƒ¨çš„æœ€é«˜åˆ†é›†ä¸­èµ·æ¥
 		QList<Entry> BestEntries;
 		for (const Entry& entry : entries) {
 			if (entry.vscore == bestScore) {
 				BestEntries << entry;
 			}
 		}
-		// 3. ÔÙÔÚ¼¸¸ö×î¼Ñ²½ÖĞËæ»úÑ¡Ôñ
+		// 3. å†åœ¨å‡ ä¸ªæœ€ä½³æ­¥ä¸­éšæœºé€‰æ‹©
 		int totalWeight = 0;
 		for (const Entry& entry : BestEntries)
 			totalWeight += entry.vscore;
 		if (totalWeight < 0)
 			return move;
 
-		int pick = Mersenne::random() % totalWeight;
+		int pick = QRandomGenerator::global()->generate() % totalWeight;
 		int currentWeight = 0;
 		for (const Entry& entry : BestEntries)
 		{

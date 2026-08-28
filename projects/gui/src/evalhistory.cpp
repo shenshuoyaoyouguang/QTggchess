@@ -1,4 +1,4 @@
-/*
+﻿/*
     This file is part of Cute Chess.
     Copyright (C) 2008-2018 Cute Chess authors
 
@@ -34,7 +34,7 @@ EvalHistory::EvalHistory(QWidget *parent)
 	auto y = m_plot->yAxis;
 	auto ticker = new QCPAxisTickerFixed;
 
-	x->setLabel(tr("�岽"));
+	x->setLabel(tr("棋步"));
 	x->setRange(1, 5);
 	x->setTicker(QSharedPointer<QCPAxisTicker>(ticker));
 	x->setSubTicks(false);
@@ -43,7 +43,7 @@ EvalHistory::EvalHistory(QWidget *parent)
 	x->setTickPen(QApplication::palette().text().color());
 	x->setBasePen(QApplication::palette().text().color());
 
-	y->setLabel(tr("�÷�"));
+	y->setLabel(tr("得分"));
 	y->setRange(-1, 1);
 	y->setSubTicks(false);
 	y->setLabelColor(QApplication::palette().text().color());

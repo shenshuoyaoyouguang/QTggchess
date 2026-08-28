@@ -1,4 +1,4 @@
-/*
+﻿/*
     This file is part of Cute Chess.
     Copyright (C) 2008-2018 Cute Chess authors
 
@@ -13,17 +13,12 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with Cute Chess.  If not, see <http://www.gnu.org/licenses/>.
+    along with Cute Chess.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include "engineoptionfactory.h"
 
 #include "engineoption.h"
-#include "enginetextoption.h"
-#include "enginebuttonoption.h"
-#include "enginecheckoption.h"
-#include "enginecombooption.h"
-#include "enginespinoption.h"
 
 EngineOption* EngineOptionFactory::create(const QVariantMap& map)
 {
@@ -43,7 +38,7 @@ EngineOption* EngineOptionFactory::create(const QVariantMap& map)
 
 	// Special case for the button option type: its value is the name
 	if (type == "button")
-		return new EngineButtonOption(name);
+		return new EngineOption(EngineOption::ButtonType, name, QVariant::Invalid);
 
 	if (value.type() != QVariant::Bool &&
 		value.type() != QVariant::String &&
@@ -69,25 +64,28 @@ EngineOption* EngineOptionFactory::create(const QVariantMap& map)
 	// a default option type
 	if (type.isEmpty())
 	{
-		return new EngineTextOption(name, value.toString(),
+		return new EngineOption(EngineOption::TextType, name,
+			QVariant::String, value.toString(),
 			defaultValue.toString(), alias);
 	}
 	else if (type == "text" || type == "file" || type == "folder")
 	{
-		EngineTextOption::EditorType editorType;
+		EngineOption::TextEditorType editorType = EngineOption::LineEdit;
 		if (type == "file")
-			editorType = EngineTextOption::FileDialog;
+			editorType = EngineOption::FileDialog;
 		else if (type == "folder")
-			editorType = EngineTextOption::FolderDialog;
-		else
-			editorType = EngineTextOption::LineEdit;
+			editorType = EngineOption::FolderDialog;
 
-		return new EngineTextOption(name, value.toString(),
-			defaultValue.toString(), alias, editorType);
+		EngineOption* option = new EngineOption(EngineOption::TextType,
+			name, QVariant::String, value.toString(),
+			defaultValue.toString(), alias);
+		option->setTextEditorType(editorType);
+		return option;
 	}
 	else if (type == "check")
 	{
-		return new EngineCheckOption(name, value.toBool(),
+		return new EngineOption(EngineOption::CheckType, name,
+			QVariant::Bool, value.toBool(),
 			defaultValue.toBool(), alias);
 	}
 	else if (type == "combo")
@@ -96,8 +94,11 @@ EngineOption* EngineOptionFactory::create(const QVariantMap& map)
 		if (choices.isEmpty())
 			return nullptr;
 
-		return new EngineComboOption(name, value.toString(),
-			defaultValue.toString(), choices, alias);
+		EngineOption* option = new EngineOption(EngineOption::ComboType,
+			name, QVariant::String, value.toString(),
+			defaultValue.toString(), alias);
+		option->setChoices(choices);
+		return option;
 	}
 	else if (type == "spin")
 	{
@@ -120,8 +121,11 @@ EngineOption* EngineOptionFactory::create(const QVariantMap& map)
 		if (!ok)
 			return nullptr;
 
-		return new EngineSpinOption(name, intValue, defaultIntValue,
-			minValue, maxValue, alias);
+		EngineOption* option = new EngineOption(EngineOption::SpinType,
+			name, QVariant::Int, intValue, defaultIntValue, alias);
+		option->setMin(minValue);
+		option->setMax(maxValue);
+		return option;
 	}
 
 	return nullptr;

@@ -4,10 +4,12 @@ HEADERS += $$PWD/boardscene.h \
     $$PWD/graphicsboard.h \
     $$PWD/graphicspiece.h \
     $$PWD/graphicspiecereserve.h \
-    $$PWD/piecechooser.h
+    $$PWD/piecechooser.h \
+    $$PWD/BasicBoardScene.h
 SOURCES += $$PWD/boardscene.cpp \
     $$PWD/boardview.cpp \
     $$PWD/graphicsboard.cpp \
     $$PWD/graphicspiece.cpp \
     $$PWD/graphicspiecereserve.cpp \
-    $$PWD/piecechooser.cpp
+    $$PWD/piecechooser.cpp \
+    $$PWD/BasicBoardScene.cpp

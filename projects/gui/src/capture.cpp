@@ -1,4 +1,4 @@
-#include "capture.h"
+ï»¿#include "capture.h"
 
 #include <QThread>
 #include <QScreen>
@@ -63,8 +63,8 @@ namespace Chess {
 		//m_board_second->reset();
 
 
-		this->m_LxInfo.m_LX_name = "±øºÓÎåËÄĞ¡ÆåÅÌ";
-		this->m_LxInfo.m_titleKeyword = "BHGUI(test) - ĞÂÆå¾Ö";
+		this->m_LxInfo.m_LX_name = "å…µæ²³äº”å››å°æ£‹ç›˜";
+		this->m_LxInfo.m_titleKeyword = "BHGUI(test) - æ–°æ£‹å±€";
 		this->m_LxInfo.m_class = "Afx:00400000:b:00010003:00000006:0A1D05FB";
 
 		this->m_LxInfo.offx = 29.0f;
@@ -149,7 +149,7 @@ namespace Chess {
 	}
 
 
-	bool Capture::GetLxInfo(QString catlog)  // Ö»Òª²éµ½ÓĞÃ»ÓĞ³µ¾ÍĞĞÁË
+	bool Capture::GetLxInfo(QString catlog)  // åªè¦æŸ¥åˆ°æœ‰æ²¡æœ‰è½¦å°±è¡Œäº†
 	{
 
 		m_Ready_LXset = false;
@@ -188,7 +188,7 @@ namespace Chess {
 		pInfo->m_class = this->get_window_class(this->m_hwnd);
 		pInfo->m_titleKeyword = this->get_window_title(this->m_hwnd);
 
-		// °ÑÆåÅÌ¸ãĞ¡Ò»Ğ©°¡£¬
+		// æŠŠæ£‹ç›˜æå°ä¸€äº›å•Šï¼Œ
 
 		//
 		m_Ready_LXset = true;
@@ -317,7 +317,7 @@ namespace Chess {
 		return true;
 	}
 
-	// Ïß³ÌÔËĞĞ
+	// çº¿ç¨‹è¿è¡Œ
 	void Capture::run() {
 
 		bMustStop = false;
@@ -325,7 +325,7 @@ namespace Chess {
 
 		//this->GetMoveFromBoard();
 		if (!isSolutionReady()) {	
-			SendMessageToMain("³ö´íÀ²", "Á¬Ïß·½°¸»¹Ã»ÓĞ×¼±¸ºÃ£¡");
+			SendMessageToMain("å‡ºé”™å•¦", "è¿çº¿æ–¹æ¡ˆè¿˜æ²¡æœ‰å‡†å¤‡å¥½ï¼");
 			return;
 		}
 
@@ -341,13 +341,13 @@ namespace Chess {
 				}
 			}
 			else {
-				// ¶ÁÈ¡¶Ô·½µÄ×ß²½£¬·¢ËÍµ½Ö÷Ïß³ÌÉÏ
+				// è¯»å–å¯¹æ–¹çš„èµ°æ­¥ï¼Œå‘é€åˆ°ä¸»çº¿ç¨‹ä¸Š
 				int a = 0;
 
 			}
 		}
 
-		SendMessageToMain("OK", "ÄãÒÑÍË³öÁ¬Ïß£¡");
+		SendMessageToMain("OK", "ä½ å·²é€€å‡ºè¿çº¿ï¼");
 	}
 
 	Chess::Move Capture::GetMoveFromBoard()
@@ -360,7 +360,7 @@ namespace Chess {
 		return Chess::Move();
 	}
 
-	// Æô¶¯Ïß³Ì
+	// å¯åŠ¨çº¿ç¨‹
 	void Capture::on_start()
 	{
 		this->start();	
@@ -371,7 +371,7 @@ namespace Chess {
 		bMustStop = true;
 	}
 
-	// µÃµ½ËùÓĞµÄÆå×ÓÁĞ±í
+	// å¾—åˆ°æ‰€æœ‰çš„æ£‹å­åˆ—è¡¨
 	bool Capture::GetLxBoardChess(bool org)
 	{
 
@@ -380,9 +380,9 @@ namespace Chess {
 
 		if (this->m_Ready_LXset == false) return false;
 
-		if (this->m_connectedBoard_OK == false) {  // »¹Ã»ÓĞÁ¬½ÓÆåÅÌ
+		if (this->m_connectedBoard_OK == false) {  // è¿˜æ²¡æœ‰è¿æ¥æ£‹ç›˜
 			if (!getChessboardHwnd()) {
-				qWarning("ÕÒ²»µ½ÆåÅÌ£¡");
+				qWarning("æ‰¾ä¸åˆ°æ£‹ç›˜ï¼");
 				return false;
 			}
 		}
@@ -395,30 +395,30 @@ namespace Chess {
 			pList = &m_LxBoard[0];
 		}
 
-		if (!SearchOnChessList(m_hwnd, "bk.png", pList->BKingList, true)) {    // ºÚ½«
-			return false;  // ÕÒ²»µ½¶Ô·½µÄ½«ÁË
+		if (!SearchOnChessList(m_hwnd, "bk.png", pList->BKingList, true)) {    // é»‘å°†
+			return false;  // æ‰¾ä¸åˆ°å¯¹æ–¹çš„å°†äº†
 		}
 
-		SearchOnChessList(m_hwnd, "br.png", pList->BCheList);     // ºÚ³µ
-		SearchOnChessList(m_hwnd, "bn.png", pList->BMaList);      // ºÚÂí
-		SearchOnChessList(m_hwnd, "bc.png", pList->BPaoList);     // ºÚÅÚ
-		SearchOnChessList(m_hwnd, "ba.png", pList->BShiList);     // ºÚÊ¿
-		SearchOnChessList(m_hwnd, "bb.png", pList->BXiangList);   // ºÚÏó
-		SearchOnChessList(m_hwnd, "bp.png", pList->BPawnList);    // ºÚ±ø
+		SearchOnChessList(m_hwnd, "br.png", pList->BCheList);     // é»‘è½¦
+		SearchOnChessList(m_hwnd, "bn.png", pList->BMaList);      // é»‘é©¬
+		SearchOnChessList(m_hwnd, "bc.png", pList->BPaoList);     // é»‘ç‚®
+		SearchOnChessList(m_hwnd, "ba.png", pList->BShiList);     // é»‘å£«
+		SearchOnChessList(m_hwnd, "bb.png", pList->BXiangList);   // é»‘è±¡
+		SearchOnChessList(m_hwnd, "bp.png", pList->BPawnList);    // é»‘å…µ
 
 
-		SearchOnChessList(m_hwnd, "rr.png", pList->RCheList);     // ºì³µ
-		SearchOnChessList(m_hwnd, "rn.png", pList->RMaList);      // ºìÂí
-		SearchOnChessList(m_hwnd, "rc.png", pList->RPaoList);     // ºìÅÚ
-		SearchOnChessList(m_hwnd, "ra.png", pList->RShiList);     // ºìÊ¿
-		SearchOnChessList(m_hwnd, "rb.png", pList->RXiangList);   // ºìÏó
-		SearchOnChessList(m_hwnd, "rp.png", pList->RPawnList);    // ºì±ø
-		SearchOnChessList(m_hwnd, "rk.png", pList->RKingList);    // ºì½«
+		SearchOnChessList(m_hwnd, "rr.png", pList->RCheList);     // çº¢è½¦
+		SearchOnChessList(m_hwnd, "rn.png", pList->RMaList);      // çº¢é©¬
+		SearchOnChessList(m_hwnd, "rc.png", pList->RPaoList);     // çº¢ç‚®
+		SearchOnChessList(m_hwnd, "ra.png", pList->RShiList);     // çº¢å£«
+		SearchOnChessList(m_hwnd, "rb.png", pList->RXiangList);   // çº¢è±¡
+		SearchOnChessList(m_hwnd, "rp.png", pList->RPawnList);    // çº¢å…µ
+		SearchOnChessList(m_hwnd, "rk.png", pList->RKingList);    // çº¢å°†
 
 		return GetFen(pList);
 	}
 
-	// µÃµ½ËùÓĞµÄÆå×ÓµÄÍ¼Æ¬
+	// å¾—åˆ°æ‰€æœ‰çš„æ£‹å­çš„å›¾ç‰‡
 	bool Capture::SaveAllPiecePicture()
 	{
 		// Bche
@@ -431,14 +431,14 @@ namespace Chess {
 		SaveOnePiecePic(1, 2, "bc.png");
 		SaveOnePiecePic(0, 3, "bp.png");
 
-		// ºì³µ
+		// çº¢è½¦
 		SaveOnePiecePic(0, 9, "rr.png");
 		SaveOnePiecePic(1, 9, "rn.png");
 		SaveOnePiecePic(2, 9, "rb.png");
 		SaveOnePiecePic(3, 9, "ra.png");
 		SaveOnePiecePic(4, 9, "rk.png");
 
-		SaveOnePiecePic(1, 7, "rc.png");  // ºìÅÚ
+		SaveOnePiecePic(1, 7, "rc.png");  // çº¢ç‚®
 		SaveOnePiecePic(0, 6, "rp.png");
 
 		return true;
@@ -454,7 +454,7 @@ namespace Chess {
 			m_LxInfo.offy - pieceSize / 2 + y * m_LxInfo.m_dx,
 			pieceSize, pieceSize);
 		QPixmap cropped = this->m_capPixmap.copy(rect);
-		cropped.save(picPath, "PNG");   // ºÚ³µ
+		cropped.save(picPath, "PNG");   // é»‘è½¦
 
 		return true;
 	}
@@ -494,7 +494,7 @@ namespace Chess {
 	{
 		if (isCap) {
 			if (this->captureOne(mainName, hw) == false) {
-				qWarning("searchImage 1 %s ³ö´íÁË£¡", findName);
+				qWarning("searchImage 1 %s å‡ºé”™äº†ï¼", findName);
 				return false;
 			}
 		}
@@ -514,23 +514,23 @@ namespace Chess {
 			}
 			else {
 				QString mFile = this->getPicturePath() + mainName;
-				m_image_source = cv::imread(mFile.toStdString()); // Ö÷Í¼
+				m_image_source = cv::imread(mFile.toStdString()); // ä¸»å›¾
 			}
 
 			//QString hashName = "aff"; // getHashName(findName);
 
-			if (this->m_MatHash.contains(findName)) {              // ±£´æÔÚ»º´æÖĞ
+			if (this->m_MatHash.contains(findName)) {              // ä¿å­˜åœ¨ç¼“å­˜ä¸­
 				image_template_scaled = this->m_MatHash.value(findName);
 			}
 			else {
 				QString fFile = this->getFindPath() + findName;
-				cv::Mat image_template = cv::imread(fFile.toStdString());   // Ä£°åÍ¼
+				cv::Mat image_template = cv::imread(fFile.toStdString());   // æ¨¡æ¿å›¾
 
 
 				cv::resize(image_template, image_template_scaled, cv::Size(), this->m_scaleX, this->m_scaleY);
 
 
-				// ÔÚÕâ¶ùÔÙ²ÃÒ»ÏÂ£¬ÒòÎªÓĞ±ß¿ò¸ÉÈÅ		
+				// åœ¨è¿™å„¿å†è£ä¸€ä¸‹ï¼Œå› ä¸ºæœ‰è¾¹æ¡†å¹²æ‰°		
 
 				int w = image_template_scaled.rows;
 				int h = image_template_scaled.cols;
@@ -543,12 +543,12 @@ namespace Chess {
 
 
 			//QString fFile = this->getFindPath() + findName;
-			//cv::Mat image_template = cv::imread(fFile.toStdString());   // Ä£°åÍ¼
+			//cv::Mat image_template = cv::imread(fFile.toStdString());   // æ¨¡æ¿å›¾
 			//cv::resize(image_template, image_template_scaled, cv::Size(), this->scaleX, this->scaleY);
 
 		}
 		catch (...) {
-			qWarning("searchImage 2 %s ³ö´íÁË£¡", findName);
+			qWarning("searchImage 2 %s å‡ºé”™äº†ï¼", findName);
 			return false;
 		}
 
@@ -562,7 +562,7 @@ namespace Chess {
 			cv::matchTemplate(m_image_source, image_template_scaled, image_matched, cv::TM_CCOEFF_NORMED);
 		}
 		catch (...) {
-			qWarning("searchImage 3 %s ³ö´íÁË£¡", findName);
+			qWarning("searchImage 3 %s å‡ºé”™äº†ï¼", findName);
 			return false;
 		}
 
@@ -574,7 +574,7 @@ namespace Chess {
 		if (threshold == 1.0f) {
 			threshold = this->m_precision;
 		}
-		res.clear();  // Çå¿ÕÊı×é
+		res.clear();  // æ¸…ç©ºæ•°ç»„
 
 		bool Isfind = false;
 
@@ -582,7 +582,7 @@ namespace Chess {
 			cv::Point minLoc, maxLoc;
 			double minVal, maxVal;
 
-			//Ñ°ÕÒ×î¼ÑÆ¥ÅäÎ»ÖÃ
+			//å¯»æ‰¾æœ€ä½³åŒ¹é…ä½ç½®
 			cv::minMaxLoc(image_matched, &minVal, &maxVal, &minLoc, &maxLoc);
 
 			if (maxVal > threshold) {
@@ -628,26 +628,26 @@ namespace Chess {
 	{
 		switch (image.format())
 		{
-			// ¶ÔÓ¦MatÖĞ8Î»4Í¨µÀÍ¼Ïñ
+			// å¯¹åº”Matä¸­8ä½4é€šé“å›¾åƒ
 		case QImage::Format_RGB32:
 		{
 			cv::Mat mat(image.height(), image.width(), CV_8UC4, const_cast<uchar*>(image.bits()), image.bytesPerLine());
 			return (inCloneImageData ? mat.clone() : mat);
 		}
 
-		// ¶ÔÓ¦MatÖĞ8Î»3Í¨µÀÍ¼Ïñ
+		// å¯¹åº”Matä¸­8ä½3é€šé“å›¾åƒ
 		case QImage::Format_RGB888:
 		{
 			if (!inCloneImageData) {
 				//qWarning() << "ASM::QImageToCvMat() - Conversion requires cloning since we use a temporary QImage";
 			}
 
-			//rgbSwappedº¯ÊıÓÃÓÚ·­×ªRBÍ¨µÀ£¬²¢·µ»ØÒ»¸öĞÂQImage£¬²¢²»»á¸Ä±äÔ­ÓĞÍ¼Ïñ
+			//rgbSwappedå‡½æ•°ç”¨äºç¿»è½¬RBé€šé“ï¼Œå¹¶è¿”å›ä¸€ä¸ªæ–°QImageï¼Œå¹¶ä¸ä¼šæ”¹å˜åŸæœ‰å›¾åƒ
 			QImage swapped = image.rgbSwapped();
 			return cv::Mat(swapped.height(), swapped.width(), CV_8UC3, const_cast<uchar*>(swapped.bits()), swapped.bytesPerLine()).clone();
 		}
 
-		// 8Î»µ¥Í¨µÀ
+		// 8ä½å•é€šé“
 		case QImage::Format_Indexed8:
 		{
 			cv::Mat  mat(image.height(), image.width(), CV_8UC1, const_cast<uchar*>(image.bits()), image.bytesPerLine());
@@ -685,7 +685,7 @@ namespace Chess {
 
 			//QString cname = this->get_window_class(hw);
 
-			// ×ª»»³É openCV ¸ñÊ½
+			// è½¬æ¢æˆ openCV æ ¼å¼
 			/*
 			cv::Mat mat = QImage_to_cvMat(this->m_capPixmap.toImage(), false);
 			m_image_source = cv::Mat(mat.rows, mat.cols, CV_8UC3);
@@ -695,7 +695,7 @@ namespace Chess {
 
 			this->m_image_source = QPixmapToCvMat(this->m_capPixmap, true);
 
-			if (this->m_Ready_LXset) {  // µ±Ç°µÄÁªÏßĞÅÏ¢OKÁË
+			if (this->m_Ready_LXset) {  // å½“å‰çš„è”çº¿ä¿¡æ¯OKäº†
 
 				//this->m_LxInfo.m_dx
 
@@ -713,7 +713,7 @@ namespace Chess {
 
 		}
 		catch (...) {
-			qWarning("½ØÍ¼³ö´íÁË£¬ %s", path + fname);
+			qWarning("æˆªå›¾å‡ºé”™äº†ï¼Œ %s", path + fname);
 			return false;
 		}
 		return  true;
@@ -819,7 +819,7 @@ namespace Chess {
 
 	bool Capture::SearchOnChessList(HWND hwnd, QString chess, QVector<cv::Point>& res, bool isCap)
 	{
-		QString chessFile = m_LxInfo.m_PieceCatlog + "/" + chess;  // ºÚ³µ
+		QString chessFile = m_LxInfo.m_PieceCatlog + "/" + chess;  // é»‘è½¦
 
 		return searchImage(hwnd, chessFile, res, nullptr, isCap);
 	}
@@ -828,12 +828,12 @@ namespace Chess {
 	{
 		// +cname	Qt5QWindowIcon	QString
 		QString wc = this->get_window_class(hwnd);
-		if (wc == "Qt5QWindowIcon") {   // È¥ÁË×Ô¼ºµÄ´°¿Ú
+		if (wc == "Qt5QWindowIcon") {   // å»äº†è‡ªå·±çš„çª—å£
 			return false;
 		}
 
 		if (onlyBche) {
-			//QString rk = m_LxInfo.m_PieceCatlog + "/br.png";  // ºÚ³µ
+			//QString rk = m_LxInfo.m_PieceCatlog + "/br.png";  // é»‘è½¦
 			//if (!searchImage(hwnd, rk, pieceList->BCheList, nullptr, true)) {
 
 			if (!SearchOnChessList(hwnd, "br.png", pieceList->BCheList, true)) {
@@ -843,7 +843,7 @@ namespace Chess {
 				return true;
 			}
 		}
-		else {  // µÃÅĞ¶ÏË«·½ÓĞ½«
+		else {  // å¾—åˆ¤æ–­åŒæ–¹æœ‰å°†
 
 			if (!SearchOnChessList(hwnd, "bk.png", pieceList->BKingList, true)) {
 				return false;
@@ -854,7 +854,7 @@ namespace Chess {
 			}
 
 			if (pieceList->RKingList.count() >= 1 && pieceList->BKingList.count() >= 1) {
-				return true;  // ±øºÓ°Ñ½«µ±Ê±¼ä·½ÁË£¡£¡
+				return true;  // å…µæ²³æŠŠå°†å½“æ—¶é—´æ–¹äº†ï¼ï¼
 			}
 		}
 

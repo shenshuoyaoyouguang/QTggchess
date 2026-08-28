@@ -1,4 +1,4 @@
-/*
+ï»¿/*
     This file is part of Cute Chess.
     Copyright (C) 2008-2018 Cute Chess authors
 
@@ -21,7 +21,7 @@
 
 #include <QString>
 
-#pragma execution_character_set("utf-8")   // ÏÔÊ¾ÖÐÎÄ
+#pragma execution_character_set("utf-8")   // æ˜¾ç¤ºä¸­æ–‡
 
 namespace Chess {
 

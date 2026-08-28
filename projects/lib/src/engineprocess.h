@@ -1,4 +1,4 @@
-/*
+﻿/*
     This file is part of Cute Chess.
     Copyright (C) 2008-2018 Cute Chess authors
 
@@ -19,13 +19,8 @@
 #ifndef ENGINEPROCESS_H
 #define ENGINEPROCESS_H
 
-#include <QtGlobal>
+#include <QProcess>
 
-#ifdef Q_OS_WIN32
-  #include "engineprocess_win.h"
-#else // not Q_OS_WIN32
-  #include <QProcess>
-  #define EngineProcess QProcess
-#endif // not Q_OS_WIN32
+#define EngineProcess QProcess
 
 #endif // ENGINEPROCESS_H

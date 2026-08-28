@@ -1,4 +1,4 @@
-/*
+ï»¿/*
     This file is part of Cute Chess.
     Copyright (C) 2008-2018 Cute Chess authors
 
@@ -52,7 +52,7 @@ class GameViewer : public QWidget
 		BoardScene* boardScene() const;
 		ChessClock* chessClock(Chess::Side side);
 
-		//void copyBoard(Chess::Board* orgBoard);   // °ÑÆå×Ó¸´ÖÆ¹ıÀ´
+		//void copyBoard(Chess::Board* orgBoard);   // æŠŠæ£‹å­å¤åˆ¶è¿‡æ¥
 
 		void viewPreviousMove2(Chess::Board* orgBoard);
 

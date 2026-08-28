@@ -1,4 +1,4 @@
-
+﻿
 
 #ifndef CHESSCLOCK_H
 #define CHESSCLOCK_H

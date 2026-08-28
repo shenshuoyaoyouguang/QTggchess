@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Release|x64">
@@ -12,11 +12,9 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{7CFC224B-5466-38F2-AA06-A4110C6E7F08}</ProjectGuid>
-    <RootNamespace>cutechess</RootNamespace>
     <Keyword>Qt4VSv1.0</Keyword>
     <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
     <WindowsTargetPlatformMinVersion>10.0.17763.0</WindowsTargetPlatformMinVersion>
-    <ProjectName>cutechess-lib</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
@@ -26,7 +24,6 @@
     <CharacterSet>NotSet</CharacterSet>
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <IntermediateDirectory>.obj\</IntermediateDirectory>
-    <PrimaryOutput>cutechess</PrimaryOutput>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <PlatformToolset>v142</PlatformToolset>
@@ -35,7 +32,6 @@
     <CharacterSet>NotSet</CharacterSet>
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <IntermediateDirectory>.obj\</IntermediateDirectory>
-    <PrimaryOutput>cutechess</PrimaryOutput>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <PropertyGroup Condition="'$(QtMsBuild)'=='' or !Exists('$(QtMsBuild)\qt.targets')">
@@ -58,12 +54,10 @@
   <PropertyGroup>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Platform)\$(Configuration)\</IntDir>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">cutechess</TargetName>
     <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</IgnoreImportLibrary>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(Platform)\$(Configuration)\</IntDir>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">cutechess</TargetName>
     <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</IgnoreImportLibrary>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -94,7 +88,6 @@
       <IgnoreImportLibrary>true</IgnoreImportLibrary>
       <LinkDLL>true</LinkDLL>
       <LinkIncremental>false</LinkIncremental>
-      <OutputFile>$(OutDir)\cutechess.dll</OutputFile>
       <RandomizedBaseAddress>true</RandomizedBaseAddress>
       <SubSystem>Windows</SubSystem>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -155,7 +148,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <IgnoreImportLibrary>true</IgnoreImportLibrary>
       <LinkDLL>true</LinkDLL>
-      <OutputFile>$(OutDir)\cutechess.dll</OutputFile>
       <RandomizedBaseAddress>true</RandomizedBaseAddress>
       <SubSystem>Windows</SubSystem>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -197,30 +189,21 @@
     <ClCompile Include="src\chessengine.cpp" />
     <ClCompile Include="src\chessgame.cpp" />
     <ClCompile Include="src\chessplayer.cpp" />
-    <ClCompile Include="src\econode.cpp" />
+    <ClCompile Include="src\eco.cpp" />
     <ClCompile Include="src\elo.cpp" />
     <ClCompile Include="src\enginebuilder.cpp" />
-    <ClCompile Include="src\enginebuttonoption.cpp" />
-    <ClCompile Include="src\enginecheckoption.cpp" />
-    <ClCompile Include="src\enginecombooption.cpp" />
     <ClCompile Include="src\engineconfiguration.cpp" />
     <ClCompile Include="src\enginefactory.cpp" />
     <ClCompile Include="src\enginemanager.cpp" />
     <ClCompile Include="src\engineoption.cpp" />
     <ClCompile Include="src\engineoptionfactory.cpp" />
-    <ClCompile Include="src\engineprocess_win.cpp" />
-    <ClCompile Include="src\enginespinoption.cpp" />
-    <ClCompile Include="src\enginetextoption.cpp" />
     <ClCompile Include="src\epdrecord.cpp" />
     <ClCompile Include="src\gameadjudicator.cpp" />
     <ClCompile Include="src\gauntlettournament.cpp" />
     <ClCompile Include="src\board\genericmove.cpp" />
     <ClCompile Include="src\humanbuilder.cpp" />
     <ClCompile Include="src\humanplayer.cpp" />
-    <ClCompile Include="components\json\src\jsonparser.cpp" />
-    <ClCompile Include="components\json\src\jsonserializer.cpp" />
     <ClCompile Include="src\knockouttournament.cpp" />
-    <ClCompile Include="src\mersenne.cpp" />
     <ClCompile Include="src\moveevaluation.cpp" />
     <ClCompile Include="src\openingbook.cpp" />
     <ClCompile Include="src\openingsuite.cpp" />
@@ -228,7 +211,6 @@
     <ClCompile Include="src\pgngameentry.cpp" />
     <ClCompile Include="src\pgngamefilter.cpp" />
     <ClCompile Include="src\pgnstream.cpp" />
-    <ClCompile Include="src\pipereader_win.cpp" />
     <ClCompile Include="src\playerbuilder.cpp" />
     <ClCompile Include="src\polyglotbook.cpp" />
     <ClCompile Include="src\pyramidtournament.cpp" />
@@ -238,18 +220,13 @@
     <ClCompile Include="src\sprt.cpp" />
     <ClCompile Include="src\board\square.cpp" />
     <ClCompile Include="src\board\standardboard.cpp" />
-    <ClCompile Include="src\board\syzygytablebase.cpp" />
-    <ClCompile Include="3rdparty\fathom\src\tbprobe.c" />
     <ClCompile Include="src\timecontrol.cpp" />
     <ClCompile Include="src\tournament.cpp" />
     <ClCompile Include="src\tournamentfactory.cpp" />
     <ClCompile Include="src\tournamentpair.cpp" />
     <ClCompile Include="src\tournamentplayer.cpp" />
     <ClCompile Include="src\uciengine.cpp" />
-    <ClCompile Include="src\board\westernboard.cpp" />
-    <ClCompile Include="src\board\westernzobrist.cpp" />
     <ClCompile Include="src\worker.cpp" />
-    <ClCompile Include="src\xboardengine.cpp" />
     <ClCompile Include="src\board\zobrist.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -262,29 +239,19 @@
     </QtMoc>
     <QtMoc Include="src\chessgame.h">
     </QtMoc>
-    <ClInclude Include="src\board\chessgiboard.h" />
     <QtMoc Include="src\chessplayer.h">
     </QtMoc>
     <ClInclude Include="src\classregistry.h" />
-    <ClInclude Include="src\econode.h" />
+    <ClInclude Include="src\eco.h" />
     <ClInclude Include="src\elo.h" />
-    <ClInclude Include="src\board\embassyboard.h" />
     <ClInclude Include="src\enginebuilder.h" />
-    <ClInclude Include="src\enginebuttonoption.h" />
-    <ClInclude Include="src\enginecheckoption.h" />
-    <ClInclude Include="src\enginecombooption.h" />
     <ClInclude Include="src\engineconfiguration.h" />
     <ClInclude Include="src\enginefactory.h" />
     <QtMoc Include="src\enginemanager.h">
     </QtMoc>
     <ClInclude Include="src\engineoption.h" />
     <ClInclude Include="src\engineoptionfactory.h" />
-    <QtMoc Include="src\engineprocess_win.h">
-    </QtMoc>
-    <ClInclude Include="src\enginespinoption.h" />
-    <ClInclude Include="src\enginetextoption.h" />
     <ClInclude Include="src\epdrecord.h" />
-    <ClInclude Include="src\board\frcboard.h" />
     <ClInclude Include="src\gameadjudicator.h" />
     <QtMoc Include="src\gamemanager.h">
     </QtMoc>
@@ -294,12 +261,8 @@
     <ClInclude Include="src\humanbuilder.h" />
     <QtMoc Include="src\humanplayer.h">
     </QtMoc>
-    <ClInclude Include="components\json\src\jsonparser.h" />
-    <ClInclude Include="components\json\src\jsonserializer.h" />
-    <ClInclude Include="src\board\kingofthehillboard.h" />
     <QtMoc Include="src\knockouttournament.h">
     </QtMoc>
-    <ClInclude Include="src\mersenne.h" />
     <ClInclude Include="src\board\move.h" />
     <ClInclude Include="src\moveevaluation.h" />
     <ClInclude Include="src\openingbook.h" />
@@ -309,14 +272,10 @@
     <ClInclude Include="src\pgngamefilter.h" />
     <ClInclude Include="src\pgnstream.h" />
     <ClInclude Include="src\board\piece.h" />
-    <QtMoc Include="src\pipereader_win.h">
-    </QtMoc>
     <ClInclude Include="src\playerbuilder.h" />
     <ClInclude Include="src\polyglotbook.h" />
     <QtMoc Include="src\pyramidtournament.h">
     </QtMoc>
-    <ClInclude Include="src\board\racingkingsboard.h" />
-    <ClInclude Include="src\board\restrictedmoveboard.h" />
     <ClInclude Include="src\board\result.h" />
     <QtMoc Include="src\roundrobintournament.h">
     </QtMoc>
@@ -324,27 +283,15 @@
     <ClInclude Include="src\sprt.h" />
     <ClInclude Include="src\board\square.h" />
     <ClInclude Include="src\board\standardboard.h" />
-    <ClInclude Include="src\board\syzygytablebase.h" />
-    <ClInclude Include="3rdparty\fathom\src\tbconfig.h" />
-    <ClInclude Include="3rdparty\fathom\src\tbcore.h" />
-    <ClInclude Include="3rdparty\fathom\src\tbprobe.h" />
     <ClInclude Include="src\timecontrol.h" />
     <QtMoc Include="src\tournament.h">
     </QtMoc>
     <ClInclude Include="src\tournamentfactory.h" />
     <ClInclude Include="src\tournamentpair.h" />
     <ClInclude Include="src\tournamentplayer.h" />
-    <ClInclude Include="src\board\twokingseachboard.h" />
     <QtMoc Include="src\uciengine.h" />
-    <ClInclude Include="src\board\westernboard.h" />
-    <ClInclude Include="src\board\westernzobrist.h" />
     <QtMoc Include="src\worker.h">
     </QtMoc>
-    <ClInclude Include="src\xboardengine.h">
-      <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\$(ConfigurationName);.\GeneratedFiles;.;.\src;.\components\json\src;.\3rdparty\fathom\src;$(QTDIR)\include;.\.moc;$(QTDIR)\mkspecs\win32-msvc;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtTest;$(QTDIR)\include\QtSql</IncludePath>
-      <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(ConfigurationName);.\GeneratedFiles;.;.\src;.\components\json\src;.\3rdparty\fathom\src;$(QTDIR)\include;.\.moc;$(QTDIR)\mkspecs\win32-msvc;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtTest;$(QTDIR)\include\QtSql</IncludePath>
-      <Define Condition="'$(Configuration)|$(Platform)'=='Release|x64'">_WINDOWS;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;LIB_EXPORT=;Z_PREFIX;NDEBUG;QT_NO_DEBUG;QT_CORE_LIB;QT_TESTLIB_LIB;QT_SQL_LIB;%(PreprocessorDefinitions)</Define>
-    </ClInclude>
     <ClInclude Include="src\board\zobrist.h" />
   </ItemGroup>
   <ItemGroup>

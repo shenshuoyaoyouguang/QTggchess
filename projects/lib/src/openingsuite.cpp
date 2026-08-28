@@ -1,10 +1,10 @@
-
+﻿
 #include "openingsuite.h"
 #include <QFile>
 #include <QTextStream>
 #include "pgnstream.h"
 #include "epdrecord.h"
-#include "mersenne.h"
+#include <QRandomGenerator>
 
 OpeningSuite::OpeningSuite(const QString& fen)
 	: m_format(EpdFormat),
@@ -112,7 +112,7 @@ bool OpeningSuite::initialize()
 			if (pos.pos == -1)
 				break;
 
-			int i = Mersenne::random() % (m_filePositions.size() + 1);
+			int i = QRandomGenerator::global()->generate() % (m_filePositions.size() + 1);
 			if (i == m_filePositions.size())
 				m_filePositions.append(pos);
 			else

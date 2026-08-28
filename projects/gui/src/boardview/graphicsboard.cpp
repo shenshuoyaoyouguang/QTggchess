@@ -1,4 +1,4 @@
-/*
+ï»¿/*
     This file is part of Cute Chess.
 
     Cute Chess is free software: you can redistribute it and/or modify
@@ -23,6 +23,7 @@
 #include <QPainter>
 #include <QPalette>
 #include <QPropertyAnimation>
+#include <cmath>
 #include <board/square.h>
 #include "graphicspiece.h"
 
@@ -95,7 +96,7 @@ QRectF GraphicsBoard::boundingRect() const
 				       m_coordSize, m_coordSize);
 	return m_rect.marginsAdded(margins);
 }
-// »æÖÆÆåÅÌ ×ø±ê
+// ç»˜åˆ¶æ£‹ç›˜ åæ ‡
 // https://www.twblogs.net/a/5c10cacfbd9eee5e41838c05/zh-cn
 void GraphicsBoard::paint(QPainter* painter,
 			  const QStyleOptionGraphicsItem* option,
@@ -104,7 +105,7 @@ void GraphicsBoard::paint(QPainter* painter,
 	Q_UNUSED(option);
 	Q_UNUSED(widget);
 
-	// »­±³¾°Í¼
+	// ç”»èƒŒæ™¯å›¾
 	//QString picPath = QCoreApplication::applicationDirPath() + "/image/backgroud.jpg";	
 	//painter->drawPixmap(m_rect.left()-100,m_rect.top()-100, QPixmap(picPath));
 
@@ -124,25 +125,25 @@ void GraphicsBoard::paint(QPainter* painter,
 	qreal off = m_squareSize/10;
 	qreal cWidth = m_squareSize / 15;
 
-	// ³õÊ¼»¯Ãè»æËÄ¸öÂÌÉ«µã×ù±ê
+	// åˆå§‹åŒ–æç»˜å››ä¸ªç»¿è‰²ç‚¹åº§æ ‡
 	//painter->drawPoint(x, y);
 	//painter->drawPoint(x + m_squareSize * 9, y);
 	//painter->drawPoint(x, y + m_squareSize * 10);
 	//painter->drawPoint(x+m_squareSize * 9, y+m_squareSize * 10);
 
-	// ÉèÖÃ»­±ÊÑÕÉ«ºÍ¿í¶È
+	// è®¾ç½®ç”»ç¬”é¢œè‰²å’Œå®½åº¦
 	//pen.setColor(Qt::black);
 	pen.setColor(m_darkColor);
 	pen.setWidth(cWidth);
 	painter->setPen(pen);
 
-	// 1.»­ÆåÅÌµÄÂÖÀªÏß
+	// 1.ç”»æ£‹ç›˜çš„è½®å»“çº¿
 	painter->drawLine(x-off, y-off, m_squareSize * 8 + x+off, y-off);
 	painter->drawLine(x-off, y-off, x-off, m_squareSize * 9 + y+off);
 	painter->drawLine(m_squareSize * 8 + x+off, y-off, m_squareSize * 8 + x+off, m_squareSize * 9 + y+off);
 	painter->drawLine(x-off, m_squareSize * 9 + y+off, m_squareSize * 8 + x+off, m_squareSize * 9 + y+off);
 
-	// 2.»­ÆåÅÌµÄ16Ìõ´¹Ö±Ïß
+	// 2.ç”»æ£‹ç›˜çš„16æ¡å‚ç›´çº¿
 	qreal xWidth = m_squareSize / 30;	// 
 	pen.setWidth(xWidth);
 	painter->setPen(pen);
@@ -152,16 +153,16 @@ void GraphicsBoard::paint(QPainter* painter,
 		painter->drawLine(x+m_squareSize * i, y+m_squareSize * 5,x+m_squareSize * i, y+m_squareSize * 9);
 	}
 
-	// 3.³şºÓ ºº½ç ¶şÌõÊú¶ÌÏß
+	// 3.æ¥šæ²³ æ±‰ç•Œ äºŒæ¡ç«–çŸ­çº¿
 	painter->drawLine(x, y, x, y+m_squareSize * 9);
 	painter->drawLine(x+m_squareSize * 8, y, x+m_squareSize * 8, y+m_squareSize * 9);
 
 
-	// 4.»­ÆåÅÌµÄ10ÌõË®Æ½Ïß
+	// 4.ç”»æ£‹ç›˜çš„10æ¡æ°´å¹³çº¿
 	for (int i = 0; i <= 9; i++)
 		painter->drawLine(x, y+ m_squareSize * i, x+ m_squareSize * 8, y+ m_squareSize * i);
 
-	// 5.»­ÆåÅÌ¡°Ê¿¡±ĞĞ×ßµÄĞ±Ïß
+	// 5.ç”»æ£‹ç›˜â€œå£«â€è¡Œèµ°çš„æ–œçº¿
 	painter->drawLine(x+m_squareSize * 3, y, x + m_squareSize * 5, y + m_squareSize * 2);
 	painter->drawLine(x+m_squareSize * 5, y, x + m_squareSize * 3, y + m_squareSize * 2);
 	painter->drawLine(x + m_squareSize * 3, y + m_squareSize * 7, x + m_squareSize * 5, y + m_squareSize * 9);
@@ -177,12 +178,12 @@ void GraphicsBoard::paint(QPainter* painter,
 	painter->setFont(f);
 	//painter->setFont(QFont("KaiTi", m_squareSize/2));	
 
-	painter->drawText(point1, "³ş ºÓ");
+	painter->drawText(point1, "æ¥š æ²³");
 	QPointF point2(x + m_squareSize * 5.2, y + m_squareSize * 4.7);
-	painter->drawText(point2, "ºº ½ç");
+	painter->drawText(point2, "æ±‰ ç•Œ");
 
 
-	// 7. Ö±½ÇÕÛÏß
+	// 7. ç›´è§’æŠ˜çº¿
 	pen.setWidth(m_squareSize/20);
 	painter->setPen(pen);
 
@@ -191,7 +192,7 @@ void GraphicsBoard::paint(QPainter* painter,
 
 	for (int j = 2; j > 0; j--)
 	{
-		for (int i = 1; i < 5; i++)  /* ±øµÄ¾®×Ö¸ñ */
+		for (int i = 1; i < 5; i++)  /* å…µçš„äº•å­—æ ¼ */
 		{
 			QPoint points1[3] = {
 				QPoint(x+m_squareSize * (2 * i - 2) + r5,  y+m_squareSize * (9 - j * 3) - r15),
@@ -222,7 +223,7 @@ void GraphicsBoard::paint(QPainter* painter,
 			painter->drawPolyline(points4, 3);
 
 
-			if (i < 3)   /* ÅÚµÄ¾®×Ö¸ñ */
+			if (i < 3)   /* ç‚®çš„äº•å­—æ ¼ */
 			{
 				QPoint points5[3] = {
 					QPoint(x+m_squareSize * pow(2, 2 * i - 1)- m_squareSize - r15,  y+m_squareSize * (pow(j + 1,2) - 2) - r5),
@@ -265,9 +266,9 @@ void GraphicsBoard::paint(QPainter* painter,
 		for (int x = 0; x < m_files; x++)
 		{
 			if ((x % 2) == (y % 2))
-				painter->fillRect(rect, m_lightColor);    // ÁÁÉ«
+				painter->fillRect(rect, m_lightColor);    // äº®è‰²
 			else
-				painter->fillRect(rect, m_darkColor);     // °µÉ«
+				painter->fillRect(rect, m_darkColor);     // æš—è‰²
 			rect.moveLeft(rect.left() + m_squareSize);
 		}
 		rect.moveTop(rect.top() + m_squareSize);

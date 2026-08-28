@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 
 #include <Windows.h>
@@ -16,9 +16,9 @@
 struct stCaptureMsg {
 
 	enum eCapMsg {
-		eMove,				// ×ß²½
-		eSetFen,			// ÉèÖÃfen
-		eText				// ÌáÊ¾ĞÅÏ¢
+		eMove,				// èµ°æ­¥
+		eSetFen,			// è®¾ç½®fen
+		eText				// æç¤ºä¿¡æ¯
 	};
 
 	eCapMsg mType;
@@ -56,33 +56,33 @@ namespace Chess {
 			//cLXinfo();
 			//~cLXinfo();
 		public:
-			QString m_LX_name;                 // Á¬ÏßµÄÃû³Æ
-			QString m_titleKeyword;            // ´°¿Ú¹Ø¼ü´Ê
-			QString m_class;                   // ´°¿ÚÀà
-			QString m_PieceCatlog;             // Æå×ÓµÄÍ¼Æ¬Ä¿Â¼
-			float offx;						   // ÆåÅÌÔ­µãx
-			float offy;                        // ÆåÅÌÔ­µãy
+			QString m_LX_name;                 // è¿çº¿çš„åç§°
+			QString m_titleKeyword;            // çª—å£å…³é”®è¯
+			QString m_class;                   // çª—å£ç±»
+			QString m_PieceCatlog;             // æ£‹å­çš„å›¾ç‰‡ç›®å½•
+			float offx;						   // æ£‹ç›˜åŸç‚¹x
+			float offy;                        // æ£‹ç›˜åŸç‚¹y
 
-			float m_dx;                         // ÆåÅÌ¸ñ¿í
-			float m_dy;                         // ÆåÅÌ¸ñ¸ß			
+			float m_dx;                         // æ£‹ç›˜æ ¼å®½
+			float m_dy;                         // æ£‹ç›˜æ ¼é«˜			
 		};
 
 		struct stLxBoard {
-			QVector<cv::Point> RCheList;		// ºì³µ
-			QVector<cv::Point> RMaList;			// ºìÂí
-			QVector<cv::Point> RPaoList;		// ºìÅÚ
-			QVector<cv::Point> RShiList;		// ºìÊË
-			QVector<cv::Point> RXiangList;		// ºìÏà
-			QVector<cv::Point> RKingList;		// ºì½«
-			QVector<cv::Point> RPawnList;		// ºì±ø
+			QVector<cv::Point> RCheList;		// çº¢è½¦
+			QVector<cv::Point> RMaList;			// çº¢é©¬
+			QVector<cv::Point> RPaoList;		// çº¢ç‚®
+			QVector<cv::Point> RShiList;		// çº¢ä»•
+			QVector<cv::Point> RXiangList;		// çº¢ç›¸
+			QVector<cv::Point> RKingList;		// çº¢å°†
+			QVector<cv::Point> RPawnList;		// çº¢å…µ
 
-			QVector<cv::Point> BCheList;		// ºÚ³µ
-			QVector<cv::Point> BMaList;			// ºÚÂí
-			QVector<cv::Point> BPaoList;		// ºÚÅÚ
-			QVector<cv::Point> BShiList;		// ºÚÊË
-			QVector<cv::Point> BXiangList;		// ºÚÏà
-			QVector<cv::Point> BKingList;		// ºÚ½«
-			QVector<cv::Point> BPawnList;		// ºÚ±ø
+			QVector<cv::Point> BCheList;		// é»‘è½¦
+			QVector<cv::Point> BMaList;			// é»‘é©¬
+			QVector<cv::Point> BPaoList;		// é»‘ç‚®
+			QVector<cv::Point> BShiList;		// é»‘ä»•
+			QVector<cv::Point> BXiangList;		// é»‘ç›¸
+			QVector<cv::Point> BKingList;		// é»‘å°†
+			QVector<cv::Point> BPawnList;		// é»‘å…µ
 
 			int b90[90];			
 		    Side side;
@@ -96,7 +96,7 @@ namespace Chess {
 		//Capture(float precision, bool UseAdb = false, int sleepMs = 200, float scX = 1.0f, float scY = 1.0f);
 		~Capture();
 
-		// µÃµ½Á¬ÏßµÄĞÅÏ¢
+		// å¾—åˆ°è¿çº¿çš„ä¿¡æ¯
 		bool GetLxInfo(QString catlog);
 
 		bool GetLxBoardChess(bool org = true);
@@ -119,13 +119,13 @@ namespace Chess {
 		//QString GetFenLxBoard(bool isOrg = true);
 
 		QChar Qpiece_to_char(int chess);
-		bool isSolutionReady(); // ·½°¸ÊÇ²»ÊÇOKÁË
+		bool isSolutionReady(); // æ–¹æ¡ˆæ˜¯ä¸æ˜¯OKäº†
 
 		int getB90(cv::Point p);
 		bool fillB90(int b90[], QVector<cv::Point>& plist, int chess);
 
 		bool getChessboardHwnd(bool onlyBChe = false);
-		bool  SaveAllPiecePicture();  // µÃµ½ËùÓĞµÄÆå×ÓĞÅÏ¢
+		bool  SaveAllPiecePicture();  // å¾—åˆ°æ‰€æœ‰çš„æ£‹å­ä¿¡æ¯
 		bool  SaveOnePiecePic(int x, int y, QString chessName);
 
 		bool captureOne(QString fname = nullptr, HWND hw = nullptr, bool disp = true, int sleepTimeMs = 0,
@@ -138,7 +138,7 @@ namespace Chess {
 		bool char2key(WCHAR ch, LONG& vk_key);
 		void AdbSendText(QString st, bool enter = true);
 
-		cv::Mat QImage_to_cvMat(const QImage& image, bool inCloneImageData = false);   // ×ª»»¸ñÊ½
+		cv::Mat QImage_to_cvMat(const QImage& image, bool inCloneImageData = false);   // è½¬æ¢æ ¼å¼
 
 		bool CaptureOneNotry(QString fname, HWND hw, int sleepTimeMS, QString path);
 
@@ -150,7 +150,7 @@ namespace Chess {
 		QString get_window_title(HWND hwnd);
 		QString get_window_class(HWND hwnd);
 
-		bool isChessBoardWindow(HWND hwnd, stLxBoard* pieceList, bool onlyBche);  // ÊÇ²»ÊÇÏóÆå´°¿Ú
+		bool isChessBoardWindow(HWND hwnd, stLxBoard* pieceList, bool onlyBche);  // æ˜¯ä¸æ˜¯è±¡æ£‹çª—å£
 
 		QString getPicturePath();
 		QString getFindPath();
@@ -160,7 +160,7 @@ namespace Chess {
 
 		bool SearchOnChessList(HWND hwnd, QString chess, QVector<cv::Point>& res, bool IsCap = false);
 
-		//½«QImage×ª»¯ÎªMat
+		//å°†QImageè½¬åŒ–ä¸ºMat
 		cv::Mat QImageToCvMat(const QImage& inImage, bool inCloneImageData = true);
 		cv::Mat QPixmapToCvMat(const QPixmap& inPixmap, bool inCloneImageData = true);
 
@@ -172,25 +172,25 @@ namespace Chess {
 		stLxBoard m_LxBoard[2];
 		Chess::Board* m_board;
 
-		bool m_Ready_LXset;               // ÒÑÓĞÁ¬ÏßÉèÖÃĞÅÏ¢ÁË
-		bool m_connectedBoard_OK;         // ÒÑÁ¬½ÓÁË
+		bool m_Ready_LXset;               // å·²æœ‰è¿çº¿è®¾ç½®ä¿¡æ¯äº†
+		bool m_connectedBoard_OK;         // å·²è¿æ¥äº†
 
 		bool bMustStop;
-		bool bSendInitFen;                // ÒÑ·¢ËÍ³õÊ¼¾ÖÃæÁË
+		bool bSendInitFen;                // å·²å‘é€åˆå§‹å±€é¢äº†
 
 
-		int m_sleepTimeMs;   // ½ØÍ¼¶¨Ê±
-		float m_precision;   // Æ¥Åä¾«¶È
+		int m_sleepTimeMs;   // æˆªå›¾å®šæ—¶
+		float m_precision;   // åŒ¹é…ç²¾åº¦
 		bool m_UseAdb;
 		HWND m_hwnd;
-		bool m_chessWinOK;  // ÆåÆ×´°¿Ú¹Ø±ÕÁË	
+		bool m_chessWinOK;  // æ£‹è°±çª—å£å…³é—­äº†	
 		float m_scaleX;
 		float m_scaleY;
-		float m_chessClip;   // °ÑÆå×ÓµÄ±ß²Ã¼ôÒ»Ğ©
+		float m_chessClip;   // æŠŠæ£‹å­çš„è¾¹è£å‰ªä¸€äº›
 
 		QHash<QString, cv::Mat> m_MatHash;
-		QPixmap m_capPixmap;      // ±£´æµÄÁÙÊ±×¥Í¼
-		cv::Mat m_image_source;   // ×ª»»ºÃµÄÖ÷Í¼
+		QPixmap m_capPixmap;      // ä¿å­˜çš„ä¸´æ—¶æŠ“å›¾
+		cv::Mat m_image_source;   // è½¬æ¢å¥½çš„ä¸»å›¾
 
 		
 		//Chess::Board* m_board_second;

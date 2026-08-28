@@ -1,4 +1,4 @@
-/*
+ï»¿/*
     This file is part of Cute Chess.
     Copyright (C) 2008-2018 Cute Chess authors
 
@@ -23,7 +23,7 @@
 
 #include <qdebug.h>
 
-// »æÖÆÆå×Ó
+// ç»˜åˆ¶æ£‹å­
 GraphicsPiece::GraphicsPiece(const Chess::Piece& piece,
 			     qreal squareSize,
 			     const QString& elementId,
@@ -65,7 +65,7 @@ void GraphicsPiece::paint(QPainter* painter,
 
 	QRectF bounds(m_renderer->boundsOnElement(m_elementId));
 	qreal ar = bounds.width() / bounds.height();
-	qreal width = m_rect.width() * 0.95;  // was 0.8 Æå×ÓÏà¶Ô¸ñ×ÓµÄ±ÈÀı
+	qreal width = m_rect.width() * 0.95;  // was 0.8 æ£‹å­ç›¸å¯¹æ ¼å­çš„æ¯”ä¾‹
 
 	if (pieceSelected) {
 		width *= 1.2;

@@ -1,4 +1,4 @@
-/*
+ï»¿/*
     This file is part of Cute Chess.
     Copyright (C) 2008-2018 Cute Chess authors
 
@@ -113,9 +113,9 @@ ChessGame* NewGameDialog::createGame() const
 	auto game = new ChessGame(board, pgn);
 
 	game->setTimeControl(ui->m_gameSettings->timeControl());
-	game->setAdjudicator(ui->m_gameSettings->adjudicator());  // ²Ã¶¨ÉèÖÃ
+	game->setAdjudicator(ui->m_gameSettings->adjudicator());  // è£å®šè®¾ç½®
 
-	auto suite = ui->m_gameSettings->openingSuite();          // ¿ª¾Ö³õÊ¼¾ÖÃæÉè¶¨
+	auto suite = ui->m_gameSettings->openingSuite();          // å¼€å±€åˆå§‹å±€é¢è®¾å®š
 	if (suite)
 	{
 		int depth = ui->m_gameSettings->openingSuiteDepth();
@@ -123,7 +123,7 @@ ChessGame* NewGameDialog::createGame() const
 		delete suite;
 	}
 
-	auto book = ui->m_gameSettings->openingBook();           // ¿ª¾Ö¿â
+	auto book = ui->m_gameSettings->openingBook();           // å¼€å±€åº“
 	if (book)
 	{
 		int depth = ui->m_gameSettings->bookDepth();
@@ -143,7 +143,7 @@ ChessGame* NewGameDialog::createGame() const
 		return nullptr;
 	}
 
-	game->isGetSetting = true;    // Æå¾ÖÒÑÉèÖÃºÃÁË
+	game->isGetSetting = true;    // æ£‹å±€å·²è®¾ç½®å¥½äº†
 
 	return game;
 }

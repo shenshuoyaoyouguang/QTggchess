@@ -7,7 +7,6 @@ HEADERS += $$PWD/chessclock.h \
     $$PWD/plaintextlog.h \
     $$PWD/newgamedlg.h \
     $$PWD/cutechessapp.h \
-    $$PWD/autoverticalscroller.h \
     $$PWD/gamedatabasedlg.h \
     $$PWD/pgnimporter.h \
     $$PWD/gamedatabasemanager.h \
@@ -41,8 +40,10 @@ HEADERS += $$PWD/chessclock.h \
     $$PWD/enginemanagementwidget.h \
     $$PWD/tournamentresultsdlg.h \
     $$PWD/gamesettingswidget.h \
-    $$PWD/tournamentsettingswidget.h
+    $$PWD/tournamentsettingswidget.h \
+    $$PWD/../BoardEditor.h
 SOURCES += $$PWD/main.cpp \
+    $$PWD/../BoardEditor.cpp \
     $$PWD/chessclock.cpp \
     $$PWD/engineconfigurationmodel.cpp \
     $$PWD/engineconfigurationdlg.cpp \
@@ -50,7 +51,6 @@ SOURCES += $$PWD/main.cpp \
     $$PWD/plaintextlog.cpp \
     $$PWD/newgamedlg.cpp \
     $$PWD/cutechessapp.cpp \
-    $$PWD/autoverticalscroller.cpp \
     $$PWD/gamedatabasedlg.cpp \
     $$PWD/pgnimporter.cpp \
     $$PWD/gamedatabasemanager.cpp \

@@ -1,4 +1,4 @@
-/*
+ï»¿/*
     This file is part of Cute Chess.
     Copyright (C) 2008-2018 Cute Chess authors
 
@@ -50,8 +50,8 @@ class LIB_EXPORT OpeningBook
 		/*! AccessMode defines how a book is accessed during play. */
 		enum BookMoveMode
 		{
-			BookRandom,	// Æå²½Ñ¡Ôñ´óÓÚ0·ÖµÄËæ»ú²½
-			BookBest	// Ñ¡Ôñ×î¼ÑµÄ¿ª¾Ö²½
+			BookRandom,	// æ£‹æ­¥é€‰æ‹©å¤§äº0åˆ†çš„éšæœºæ­¥
+			BookBest	// é€‰æ‹©æœ€ä½³çš„å¼€å±€æ­¥
 		};
 
 		/*!
@@ -176,7 +176,7 @@ class LIB_EXPORT OpeningBook
 		Map m_map;
 		bool useBerKeyDB;	    	// 
 		bool useSqlliteDB;
-		//QSqlDatabase DB[2];         // ºìºÚ¶ş¸öÁ¬½Ó 
+		//QSqlDatabase DB[2];         // çº¢é»‘äºŒä¸ªè¿æ¥ 
 
 		//QList<QSqlDatabase> SQLDB;
 

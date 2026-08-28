@@ -1,4 +1,4 @@
-/*
+﻿/*
     This file is part of Cute Chess.
     Copyright (C) 2008-2018 Cute Chess authors
 
@@ -172,8 +172,8 @@ class LIB_EXPORT EngineConfiguration
 		/*!
 		 * Sets option \a name's value to \a value.
 		 *
-		 * If an option with the name \a name doesn't exist, a new
-		 * EngineTextOption object is added to the configuration.
+			 * If an option with the name \a name doesn't exist, a new
+			 * EngineOption object is added to the configuration.
 		 */
 		void setOption(const QString& name, const QVariant& value);
 

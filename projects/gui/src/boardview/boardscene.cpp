@@ -1,4 +1,4 @@
-/*
+ï»¿/*
     This file is part of Cute Chess.
     Copyright (C) 2008-2018 Cute Chess authors
 
@@ -86,11 +86,11 @@ void BoardScene::setBoard(Chess::Board* board)
 
 	//this->setBackgroundBrush(Qt::green); bg.png
 
-	//this->setBackgroundBrush(QColor(0xf6, 0xf5, 0xf0));  // Ö½ÖÊÊéµÄ¸Ð¾õ'
+	//this->setBackgroundBrush(QColor(0xf6, 0xf5, 0xf0));  // çº¸è´¨ä¹¦çš„æ„Ÿè§‰'
 
-	//this->setBackgroundBrush(QColor(0x70, 0x80, 0x90));  // Ö½ÖÊÊéµÄ¸Ð¾õ
+	//this->setBackgroundBrush(QColor(0x70, 0x80, 0x90));  // çº¸è´¨ä¹¦çš„æ„Ÿè§‰
 
-	//this->setBackgroundBrush(QColor(0x33, 0x6e, 0x7b));  // Ö½ÖÊÊéµÄ¸Ð¾õ
+	//this->setBackgroundBrush(QColor(0x33, 0x6e, 0x7b));  // çº¸è´¨ä¹¦çš„æ„Ÿè§‰
 
 	//QString pic = QCoreApplication::applicationDirPath() + "/image/backgroud.jpg";
 
@@ -143,7 +143,7 @@ void BoardScene::populate()
 		for (int y = 0; y < m_board->height(); y++)
 		{
 			Chess::Square sq(x, y);
-			GraphicsPiece* piece(createPiece(m_board->pieceAt(sq)));   // ·ÅÉÏÆå×Ó
+			GraphicsPiece* piece(createPiece(m_board->pieceAt(sq)));   // æ”¾ä¸Šæ£‹å­
 
 			if (piece != nullptr)
 				m_squares->setSquare(sq, piece);

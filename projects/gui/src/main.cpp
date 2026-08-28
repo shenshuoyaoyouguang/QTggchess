@@ -1,4 +1,4 @@
-/*
+Ôªø/*
     This file is part of Cute Chess.
     Copyright (C) 2008-2018 Cute Chess authors
 
@@ -32,7 +32,9 @@
 #include <board/result.h>
 #include <moveevaluation.h>
 
+#ifdef QTGG_CAPTURE
 #include "capture.h"
+#endif
 
 int main(int argc, char* argv[])
 {
@@ -43,13 +45,15 @@ int main(int argc, char* argv[])
 	qRegisterMetaType<Chess::Result>("Chess::Result");
 	qRegisterMetaType<MoveEvaluation>("MoveEvaluation");
 
+#ifdef QTGG_CAPTURE
 	qRegisterMetaType<stCaptureMsg>("stCaptureMsg");
+#endif
 
 	QLoggingCategory::defaultCategory()->setEnabled(QtDebugMsg, true);
 
 	CuteChessApplication app(argc, argv);
 
-	// ”Ô—‘…Ë÷√
+	// ËØ≠Ë®ÄËÆæÁΩÆ
 	QTranslator translator;
 	translator.load(QLocale(), "GGzeroGui", "_", "translations", ".qm");
 	app.installTranslator(&translator);

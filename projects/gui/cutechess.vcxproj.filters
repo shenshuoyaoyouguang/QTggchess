@@ -62,9 +62,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\autoverticalscroller.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\chessclock.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -220,9 +217,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="src\autoverticalscroller.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
     <QtMoc Include="src\boardview\boardscene.h">
       <Filter>Header Files</Filter>
     </QtMoc>

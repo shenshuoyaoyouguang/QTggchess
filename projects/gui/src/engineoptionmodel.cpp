@@ -1,4 +1,4 @@
-/*
+﻿/*
     This file is part of Cute Chess.
     Copyright (C) 2008-2018 Cute Chess authors
 
@@ -19,7 +19,6 @@
 #include "engineoptionmodel.h"
 
 #include <engineoption.h>
-#include <enginebuttonoption.h>
 
 
 EngineOptionModel::EngineOptionModel(QObject* parent)

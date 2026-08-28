@@ -1,4 +1,4 @@
-/*
+﻿/*
     This file is part of Cute Chess.
     Copyright (C) 2008-2018 Cute Chess authors
 
@@ -20,7 +20,7 @@
 #include <QStringList>
 #include <QtMath>
 #include "playerbuilder.h"
-#include "mersenne.h"
+#include <QRandomGenerator>
 
 
 KnockoutTournament::KnockoutTournament(GameManager* gameManager,
@@ -72,7 +72,7 @@ QList<int> KnockoutTournament::firstRoundPlayers() const
 
 	while (!unseeded.isEmpty())
 	{
-		int i = Mersenne::random() % unseeded.size();
+		int i = QRandomGenerator::global()->generate() % unseeded.size();
 		players << unseeded.takeAt(i);
 	}
 

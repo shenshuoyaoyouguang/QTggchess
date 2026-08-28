@@ -1,4 +1,4 @@
-
+Ôªø
 
 #ifndef BOARD_H
 #define BOARD_H
@@ -46,34 +46,10 @@ class LIB_EXPORT Board
 	Q_DECLARE_TR_FUNCTIONS(Board)
 
 	public:
-		/*! Coordinate system for the notation of the squares. */
-		//enum CoordinateSystem
-		//{
-		//	/*!
-		//	 * Normal/traditional coordinates used by most chess
-		//	 * variants.
-		//	 *
-		//	 * The file is denoted by a letter, starting with file
-		//	 * 'A' on the left.
-		//	 * The rank is denoted by a number, starting with rank
-		//	 * '1' at the bottom.
-		//	 */
-		//	NormalCoordinates,
-		//	/*!
-		//	 * Inverted coordinates used by some eastern variants like
-		//	 * Shogi.
-		//	 *
-		//	 * The file is denoted by a number, starting with file
-		//	 * '1' on the right.
-		//	 * The rank is denoted by a letter, starting with rank
-		//	 * 'A' at the top.
-		//	 */
-		//	InvertedCoordinates
-		//};
 		/*! Notation for move strings. */
 		enum MoveNotation
 		{
-			StandardChinese,	// ÷–Œƒ∆Â≤Ω
+			StandardChinese,	// ‰∏≠ÊñáÊ£ãÊ≠•
 			LongAlgebraic		//!< Long Algebraic/Coordinate notation.
 		};
 		/*! Notation for FEN strings. */
@@ -104,18 +80,6 @@ class LIB_EXPORT Board
 		/*! Returns the name of the chess variant. */
 		virtual QString variant() const = 0;
 		/*!
-		 * Returns true if the variant uses randomized starting positions.
-		 * The default value is false.
-		 */
-		//virtual bool isRandomVariant() const;
-		/*!
-		 * Returns true if the variant allows piece drops.
-		 * The default value is false.
-		 *
-		 * \sa CrazyhouseBoard
-		 */
-		//virtual bool variantHasDrops() const;
-		/*!
 		 * Returns true if the board accepts wall squares, else false.
 		 * The default value is false.
 		 */
@@ -127,8 +91,6 @@ class LIB_EXPORT Board
 		 * The default implementation returns an empty list.
 		 */
 		virtual QList<Piece> reservePieceTypes() const;
-		/*! Returns the coordinate system used in the variant. */
-		//virtual CoordinateSystem coordinateSystem() const;
 		/*! Returns the width of the board in squares. */
 		virtual int width() const = 0;
 		/*! Returns the height of the board in squares. */
@@ -147,10 +109,10 @@ class LIB_EXPORT Board
 		/*! Returns true if \a square is on the board. */
 		bool isValidSquare(const Square& square) const;
 
-		// ∆Â∏Ò «∑Ò‘⁄π¨µÓ¿Ô
+		// Ê£ãÊ†ºÊòØÂê¶Âú®ÂÆ´ÊÆøÈáå
 		bool isInPalace(const Square& square) const;
 
-		// ∆Â◊” «∑Òπ˝∫”
+		// Ê£ãÂ≠êÊòØÂê¶ËøáÊ≤≥
 		bool isOverRiver(const Square& square) const;
 
 		/*!
@@ -206,13 +168,6 @@ class LIB_EXPORT Board
 		 * The default implementation always returns -1.
 		 */
 		virtual int reversibleMoveCount() const;
-		/*!
-		 * Returns the number of reserve pieces of type \a piece.
-		 *
-		 * On variants that don't have piece drops this function
-		 * always returns 0.
-		 */
-		//int reserveCount(Piece piece) const;
 		/*! Converts \a piece into a piece symbol. */
 		QString pieceSymbol(Piece piece) const;
 		/*! Converts \a pieceSymbol into a Piece object. */
@@ -251,7 +206,7 @@ class LIB_EXPORT Board
 		 */
 		Move moveFromString(const QString& str);
 
-		// ¥”÷–Œƒ∆Â≤Ω√˚≥∆µ√µΩ∆Â≤Ω
+		// ‰ªé‰∏≠ÊñáÊ£ãÊ≠•ÂêçÁß∞ÂæóÂà∞Ê£ãÊ≠•
 		virtual Move moveFromStringCN(const QString& str) = 0;
 		/*!
 		 * Converts a GenericMove into a Move.
@@ -277,11 +232,6 @@ class LIB_EXPORT Board
 		bool isRepetition(const Move& move);
 		/*! Returns a vector of legal moves in the current position. */
 		QVector<Move> legalMoves();
-		/*!
-		 * Returns the result of the game, or Result::NoResult if
-		 * the game is in progress.
-		 */
-		//void GetNextPosKeys(QVector<quint64>& keys);
 		virtual Result result() = 0;
 		/*!
 		 * Returns the expected game result according to endgame tablebases.
@@ -330,10 +280,7 @@ class LIB_EXPORT Board
 		void setPieceType(int type,
 				  const QString& name,
 				  const QString& symbol,
-				  //unsigned movement = 0,
 				  const QString & gsymbol = QString());
-		/*! Returns true if \a pieceType can move like \a movement. */
-		//bool pieceHasMovement(int pieceType, unsigned movement) const;
 
 		/*!
 		 * Makes \a move on the board.
@@ -384,10 +331,6 @@ class LIB_EXPORT Board
 		virtual QString ChineseMoveString(const Move& move) = 0;
 		/*! Converts a string in LAN format into a Move object. */
 		virtual Move moveFromEnglishString(const QString& str);
-		/*! Converts a string in SAN format into a Move object. */
-		//virtual Move moveFromSanString(const QString& str) = 0;
-		/*! Returns the maximal length of a piece symbol */
-		//virtual int maxPieceSymbolLength() const;
 
 		/*!
 		 * Returns the latter part of the current position's FEN string.
@@ -416,16 +359,6 @@ class LIB_EXPORT Board
 		void generateMoves(QVarLengthArray<Move>& moves,
 				   int pieceType = Piece::NoPiece) const;
 
-
-		
-		/*!
-		 * Generates piece drops for pieces of type \a pieceType.
-		 *
-		 * \note If \a pieceType is Piece::NoPiece, moves are generated
-		 * for every piece type.
-		 * \sa generateMoves()
-		 */
-		//void generateDropMoves(QVarLengthArray<Move>& moves, int pieceType) const;
 		/*!
 		 * Generates pseudo-legal moves for a piece of \a pieceType
 		 * at square \a square.
@@ -479,7 +412,6 @@ class LIB_EXPORT Board
 
 		virtual bool vIsBan(const Move& move);
 
-		//virtual bool vIsIncheck(const Side side) = 0;      // side ∑Ω «≤ª «±ªΩ´æ¸¡À
 
 		/*!
 		 * Returns the type of piece captured by \a move.
@@ -515,17 +447,12 @@ class LIB_EXPORT Board
 		 * The default value is \a pieceType.
 		 */
 		virtual int reserveType(int pieceType) const;
-		/*! Adds \a count pieces of type \a piece to the reserve. */
-		//void addToReserve(const Piece& piece, int count = 1);
-		/*! Removes a piece of type \a piece from the reserve. */
-		//void removeFromReserve(const Piece& piece);
 
 	private:
 		struct PieceData
 		{
 			QString name;
 			QString symbol;
-			//unsigned movement;
 			QString representation;
 		};
 		struct MoveData
@@ -541,14 +468,12 @@ class LIB_EXPORT Board
 		Side m_side;
 		Side m_startingSide;
 		QString m_startingFen;
-		//int m_maxPieceSymbolLength;
 		quint64 m_key;
 		Zobrist* m_zobrist;
 		QSharedPointer<Zobrist> m_sharedZobrist;
 		QVarLengthArray<PieceData> m_pieceData;
 		QVarLengthArray<Piece> m_squares;
 		QVector<MoveData> m_moveHistory;
-		//QVector<int> m_reserve[2];
 };
 
 
@@ -614,13 +539,6 @@ inline const Move& Board::lastMove() const
 	return m_moveHistory.last().move;
 }
 
-//inline bool Board::pieceHasMovement(int pieceType, unsigned movement) const
-//{
-//	Q_ASSERT(pieceType != Piece::NoPiece);
-//	Q_ASSERT(pieceType < m_pieceData.size());
-//
-//	return (m_pieceData[pieceType].movement & movement);
-//}
 
 } // namespace Chess
 #endif // BOARD_H

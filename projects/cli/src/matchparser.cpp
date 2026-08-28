@@ -1,4 +1,4 @@
-/*
+﻿/*
     This file is part of Cute Chess.
     Copyright (C) 2008-2018 Cute Chess authors
 
@@ -106,7 +106,7 @@ bool MatchParser::parse()
 			list << *it;
 		}
 		--it;
-		
+
 		if (!option.duplicates && contains(name))
 		{
 			qWarning("Multiple instances of option \"%s\"",
@@ -130,7 +130,7 @@ bool MatchParser::parse()
 				 qUtf8Printable(name));
 			return false;
 		}
-		
+
 		// Boolean option
 		if (list.isEmpty())
 		{
@@ -138,7 +138,7 @@ bool MatchParser::parse()
 			m_options.insert(option.priority, tmp);
 			continue;
 		}
-		
+
 		QVariant value;
 		if (option.type == QVariant::StringList)
 			value.setValue(list);
@@ -151,7 +151,7 @@ bool MatchParser::parse()
 				 qUtf8Printable(list.join(" ")));
 			return false;
 		}
-		
+
 		Option tmp = { name, value };
 		m_options.insert(option.priority, tmp);
 	}

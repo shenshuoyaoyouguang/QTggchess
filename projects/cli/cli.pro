@@ -27,7 +27,7 @@ mac {
     CONFIG -= app_bundle
 }
 
-QT = core
+QT = core sql
 
 # Code
 include(src/src.pri)

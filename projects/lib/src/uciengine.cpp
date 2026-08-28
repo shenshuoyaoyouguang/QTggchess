@@ -1,4 +1,4 @@
-/*
+ï»¿/*
     This file is part of Cute Chess.
 
     Cute Chess is free software: you can redistribute it and/or modify
@@ -24,11 +24,7 @@
 #include "board/boardfactory.h"
 #include "timecontrol.h"
 
-#include "enginebuttonoption.h"
-#include "enginecheckoption.h"
-#include "enginecombooption.h"
-#include "enginespinoption.h"
-#include "enginetextoption.h"
+#include "engineoption.h"
 
 namespace {
 
@@ -115,7 +111,7 @@ QString UciEngine::positionString()
 	//	str += " startpos";
 
 	if (!m_moveStrings.isEmpty())
-		str += QString(" moves") + m_moveStrings;	// Æå²½Êä³ö
+		str += QString(" moves") + m_moveStrings;	// æ£‹æ­¥è¾“å‡º
 
 	return str;
 }
@@ -125,7 +121,7 @@ void UciEngine::sendPosition()
 	write(positionString());
 }
 
-void UciEngine::startGame()   // ÒýÇæ¿ªÊ¼¾ÖÃæ
+void UciEngine::startGame()   // å¼•æ“Žå¼€å§‹å±€é¢
 {
 	Q_ASSERT(supportsVariant(board()->variant()));
 	const QList<QString> directPvList = {"giveaway", "suicide", "antichess"};
@@ -576,23 +572,35 @@ EngineOption* UciEngine::parseOption(const QStringRef& line)
 		return nullptr;
 
 	if (type == "button")
-		return new EngineButtonOption(name);
+		return new EngineOption(EngineOption::ButtonType, name, QVariant::Invalid);
 	else if (type == "check")
-	{
-		if (value == "true")
-			return new EngineCheckOption(name, true, true);
-		else
-			return new EngineCheckOption(name, false, false);
-	}
+		return new EngineOption(EngineOption::CheckType, name, QVariant::Bool,
+			value == "true", value == "true");
 	else if (type == "combo")
-		return new EngineComboOption(name, value, value, choices);
+	{
+		EngineOption* option = new EngineOption(EngineOption::ComboType,
+			name, QVariant::String, value, value);
+		option->setChoices(choices);
+		return option;
+	}
 	else if (type == "spin")
-		return new EngineSpinOption(name, value.toInt(), value.toInt(), min, max);
+	{
+		EngineOption* option = new EngineOption(EngineOption::SpinType,
+			name, QVariant::Int, value.toInt(), value.toInt());
+		option->setMin(min);
+		option->setMax(max);
+		return option;
+	}
 	else if (type == "string")
-		return new EngineTextOption(name, value, value);
+		return new EngineOption(EngineOption::TextType, name,
+			QVariant::String, value, value);
 	else if (type == "filename")
-		return new EngineTextOption(name, value, value, QString(),
-					    EngineTextOption::FileDialog);
+	{
+		EngineOption* option = new EngineOption(EngineOption::TextType,
+			name, QVariant::String, value, value);
+		option->setTextEditorType(EngineOption::FileDialog);
+		return option;
+	}
 
 	return nullptr;
 }
@@ -732,8 +740,7 @@ void UciEngine::parseLine(const QString& line)
 
 void UciEngine::addVariantsFromOption(const EngineOption* option)
 {
-	const auto combo = dynamic_cast<const EngineComboOption*>(option);
-	if (!combo)
+	if (option->type() != EngineOption::ComboType)
 	{
 		qWarning("Option %s from %s is not a combo option",
 			 qUtf8Printable(option->name()),
@@ -741,7 +748,7 @@ void UciEngine::addVariantsFromOption(const EngineOption* option)
 		return;
 	}
 
-	const auto choices = combo->choices();
+	const auto choices = option->choices();
 	for (const auto& choice : choices)
 	{
 		QString variant = variantFromUci(choice, false);

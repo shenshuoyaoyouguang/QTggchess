@@ -1,4 +1,4 @@
-Usage:
+﻿Usage:
 
   cutechess-cli -engine [eng_options] -engine [eng_options]... [options]
 
@@ -93,13 +93,6 @@ Options:
   -maxmoves N		Adjudicate the game as a draw if the game is still
 			ongoing after N or more full moves have been played.
 			This limit is not in action if set to zero.
-  -tb PATHS		Adjudicate games using Syzygy tablebases. PATHS should
-			be semicolon-delimited list of paths to the compressed
-			tablebase files. Only the WDL tablebase files are
-			required.
-  -tbpieces N		Only use tablebase adjudication for positions with
-			N pieces or less.
-  -tbignore50		Disable the fifty move rule for tablebase adjudication.
   -tournament TYPE	Set the tournament type to TYPE, which can be one of:
 			'round-robin': Round-robin tournament (default)
 			'gauntlet': First engine plays against the rest

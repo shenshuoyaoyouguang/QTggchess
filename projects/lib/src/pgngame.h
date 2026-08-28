@@ -1,4 +1,4 @@
-/*
+﻿/*
     This file is part of Cute Chess.
 
     Cute Chess is free software: you can redistribute it and/or modify
@@ -29,7 +29,6 @@
 #include "board/result.h"
 class QTextStream;
 class PgnStream;
-class EcoNode;
 class QObject;
 namespace Chess { class Board; }
 
@@ -209,7 +208,7 @@ class LIB_EXPORT PgnGame
 		bool parseMove(PgnStream& in, bool addEco);
 		
 		Chess::Side m_startingSide;
-		const EcoNode* m_eco;
+		QString m_ecoSequence;
 		QMap<QString, QString> m_tags;
 		QVector<MoveData> m_moves;
 		QObject* m_tagReceiver;

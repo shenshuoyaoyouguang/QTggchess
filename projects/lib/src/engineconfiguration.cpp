@@ -1,4 +1,4 @@
-/*
+﻿/*
     This file is part of Cute Chess.
     Copyright (C) 2008-2018 Cute Chess authors
 
@@ -19,7 +19,6 @@
 #include "engineconfiguration.h"
 
 #include "engineoption.h"
-#include "enginetextoption.h"
 #include "engineoptionfactory.h"
 
 EngineConfiguration::EngineConfiguration()
@@ -318,7 +317,8 @@ void EngineConfiguration::setOption(const QString& name, const QVariant& value)
 		}
 	}
 
-	m_options << new EngineTextOption(name, value, value);
+	m_options << new EngineOption(EngineOption::TextType, name,
+				   QVariant::String, value, value);
 }
 
 bool EngineConfiguration::whiteEvalPov() const

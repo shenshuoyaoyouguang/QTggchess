@@ -11,16 +11,10 @@ HEADERS += $$PWD/chessengine.h \
     $$PWD/polyglotbook.h \
     $$PWD/timecontrol.h \
     $$PWD/uciengine.h \
-    $$PWD/xboardengine.h \
     $$PWD/moveevaluation.h \
     $$PWD/enginemanager.h \
     $$PWD/humanplayer.h \
     $$PWD/engineoption.h \
-    $$PWD/enginespinoption.h \
-    $$PWD/enginecombooption.h \
-    $$PWD/enginecheckoption.h \
-    $$PWD/enginetextoption.h \
-    $$PWD/enginebuttonoption.h \
     $$PWD/pgngameentry.h \
     $$PWD/gamemanager.h \
     $$PWD/playerbuilder.h \
@@ -36,8 +30,7 @@ HEADERS += $$PWD/chessengine.h \
     $$PWD/gauntlettournament.h \
     $$PWD/epdrecord.h \
     $$PWD/openingsuite.h \
-    $$PWD/econode.h \
-    $$PWD/mersenne.h \
+    $$PWD/eco.h \
     $$PWD/sprt.h \
     $$PWD/gameadjudicator.h \
     $$PWD/elo.h \
@@ -56,16 +49,10 @@ SOURCES += $$PWD/chessengine.cpp \
     $$PWD/polyglotbook.cpp \
     $$PWD/timecontrol.cpp \
     $$PWD/uciengine.cpp \
-    $$PWD/xboardengine.cpp \
     $$PWD/moveevaluation.cpp \
     $$PWD/enginemanager.cpp \
     $$PWD/humanplayer.cpp \
     $$PWD/engineoption.cpp \
-    $$PWD/enginespinoption.cpp \
-    $$PWD/enginecombooption.cpp \
-    $$PWD/enginecheckoption.cpp \
-    $$PWD/enginetextoption.cpp \
-    $$PWD/enginebuttonoption.cpp \
     $$PWD/pgngameentry.cpp \
     $$PWD/gamemanager.cpp \
     $$PWD/playerbuilder.cpp \
@@ -80,8 +67,7 @@ SOURCES += $$PWD/chessengine.cpp \
     $$PWD/gauntlettournament.cpp \
     $$PWD/epdrecord.cpp \
     $$PWD/openingsuite.cpp \
-    $$PWD/econode.cpp \
-    $$PWD/mersenne.cpp \
+    $$PWD/eco.cpp \
     $$PWD/sprt.cpp \
     $$PWD/gameadjudicator.cpp \
     $$PWD/elo.cpp \
@@ -90,9 +76,4 @@ SOURCES += $$PWD/chessengine.cpp \
     $$PWD/tournamentplayer.cpp \
     $$PWD/tournamentpair.cpp \
     $$PWD/worker.cpp
-win32 { 
-    HEADERS += $$PWD/engineprocess_win.h \
-	$$PWD/pipereader_win.h
-    SOURCES += $$PWD/engineprocess_win.cpp \
-	$$PWD/pipereader_win.cpp
-}
+

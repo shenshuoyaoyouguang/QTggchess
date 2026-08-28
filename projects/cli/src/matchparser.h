@@ -1,4 +1,4 @@
-/*
+﻿/*
     This file is part of Cute Chess.
     Copyright (C) 2008-2018 Cute Chess authors
 
@@ -19,14 +19,18 @@
 #ifndef MATCHPARSER_H
 #define MATCHPARSER_H
 
+#include <QList>
 #include <QMap>
-#include <QMultiMap>
 #include <QStringList>
 #include <QVariant>
 
 
 /*!
  * \brief A command line parser for EngineMatch options
+ *
+ * Value collection follows the original Cute Chess semantics (an option
+ * consumes following tokens until the next option that is not a negative
+ * number).
  *
  * \sa EngineMatch
  */
@@ -82,7 +86,7 @@ class MatchParser
 		 * a null QVariant is returned.
 		 */
 		QVariant takeOption(const QString& name);
-		/*! Returns the options parsed by \a parse(). */
+		/*! Returns the options parsed by parse(). */
 		QList<Option> options() const;
 		/*!
 		 * Parses the command line arguments.

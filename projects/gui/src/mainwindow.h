@@ -1,4 +1,4 @@
-/*
+ï»¿/*
     This file is part of Cute Chess.
     Copyright (C) 2008-2018 Cute Chess authors
 
@@ -26,8 +26,10 @@
 
 #include <humanbuilder.h>
 
-
+#ifdef QTGG_CAPTURE
 #include "capture.h"
+#endif
+
 //#include "TestThread.h"
 
 namespace Chess {
@@ -95,7 +97,7 @@ class MainWindow : public QMainWindow
 		void editMoveComment(int ply, const QString& comment);
 		void copyFen();
 		void pasteFen();
-		//void msgFen(QString fen);              // Õâ¸öÊÇÁÙÊ±µÄ
+		//void msgFen(QString fen);              // è¿™ä¸ªæ˜¯ä¸´æ—¶çš„
 		void copyPgn();
 		void showAboutDialog();
 		void closeAllGames();
@@ -104,9 +106,11 @@ class MainWindow : public QMainWindow
 		void adjudicateBlackWin();
 		void resignGame();
 
+#ifdef QTGG_CAPTURE
 		void processCapMsg(stCaptureMsg msg);
+#endif
 
-		// ßBÏßÆåÅÌ
+		// é€£çº¿æ£‹ç›˜
 		void onLXchessboardStart();
 		void onLXchessboardStop();
 
@@ -114,27 +118,34 @@ class MainWindow : public QMainWindow
 		//EngineConfiguration m_engineConfig[2];
 
 		
-		void onPlayRedToggled(bool checked);	// µçÄÔÖ´ºì	
-		void onPlayBlackToggled(bool checked);  // µçÄÔÖ´ºÚ
+		void onPlayRedToggled(bool checked);	// ç”µè„‘æ‰§çº¢	
+		void onPlayBlackToggled(bool checked);  // ç”µè„‘æ‰§é»‘
 		void onPlayWhich(bool checked); // , Chess::Side side);
 
-		void onLinkRedToggled(bool checked); // µçÄÔÖ´ºìÁ¬Ïß
-		void onLinkBlackToggled(bool checked); // µçÄÔÖ´ºìÁ¬Ïß
+		void onLinkRedToggled(bool checked); // ç”µè„‘æ‰§çº¢è¿çº¿
+		void onLinkBlackToggled(bool checked); // ç”µè„‘æ‰§çº¢è¿çº¿
 		void onLinkWhich(bool checked);
 
-	private:
-		struct TabData
-		{
-			explicit TabData(ChessGame* m_game,
-				Chess::Capture* cap, Tournament* m_tournament = nullptr);
+		private:
+			struct TabData
+			{
+#ifdef QTGG_CAPTURE
+				explicit TabData(ChessGame* m_game,
+					Chess::Capture* cap, Tournament* m_tournament = nullptr);
+#else
+				explicit TabData(ChessGame* m_game,
+					Tournament* m_tournament = nullptr);
+#endif
 
-			ChessGame* m_id;
-			QPointer<ChessGame> m_game;
-			PgnGame* m_pgn;
-			Tournament* m_tournament;
-			bool m_finished;
-			Chess::Capture* m_cap; 
-		};
+				ChessGame* m_id;
+				QPointer<ChessGame> m_game;
+				PgnGame* m_pgn;
+				Tournament* m_tournament;
+				bool m_finished;
+#ifdef QTGG_CAPTURE
+				Chess::Capture* m_cap; 
+#endif
+			};
 
 		void createActions();
 		void createMenus();
@@ -162,16 +173,16 @@ class MainWindow : public QMainWindow
 		QMenu* m_windowMenu;
 		QMenu* m_helpMenu;
 
-		QToolBar* mainToolbar;              // Ö÷²Ëµ¥¹¤¾ßÌõ
-		QToolButton* tbtnEnginePlayRed;     // ÒıÇæÖ´ºì
-		QToolButton* tbtnEnginePlayBlack;   // ÒıÇæÖ´ºÚ
-		QToolButton* tbtnLinkChessBoardRed;      // Á¬½ÓÆäËüÆåÅÌ£¬ºì·½µçÄÔ 
-		QToolButton* tbtnLinkChessBoardBlack;    // Á¬½ÓÆäËüÆåÅÌ£¬ºÚ·½µçÄÔ
+		QToolBar* mainToolbar;              // ä¸»èœå•å·¥å…·æ¡
+		QToolButton* tbtnEnginePlayRed;     // å¼•æ“æ‰§çº¢
+		QToolButton* tbtnEnginePlayBlack;   // å¼•æ“æ‰§é»‘
+		QToolButton* tbtnLinkChessBoardRed;      // è¿æ¥å…¶å®ƒæ£‹ç›˜ï¼Œçº¢æ–¹ç”µè„‘ 
+		QToolButton* tbtnLinkChessBoardBlack;    // è¿æ¥å…¶å®ƒæ£‹ç›˜ï¼Œé»‘æ–¹ç”µè„‘
 
-		//QAction* actEngineThink;      // ÈÃÒıÇæË¼¿¼
-		QAction* actEngineStop;       // ÈÃÒıÇæÍ£Ö¹Ë¼¿¼£¬Á¢¼´³ö²½
-		QAction* actEngineAnalyze;    // ÈÃÒıÇæ·ÖÎö
-		QAction* actEngineSetting;    // ÒıÇæÉèÖÃ²ÎÊı
+		//QAction* actEngineThink;      // è®©å¼•æ“æ€è€ƒ
+		QAction* actEngineStop;       // è®©å¼•æ“åœæ­¢æ€è€ƒï¼Œç«‹å³å‡ºæ­¥
+		QAction* actEngineAnalyze;    // è®©å¼•æ“åˆ†æ
+		QAction* actEngineSetting;    // å¼•æ“è®¾ç½®å‚æ•°
 
 
 		GameTabBar* m_tabBar;		    

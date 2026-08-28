@@ -1,4 +1,4 @@
-/*
+ï»¿/*
     This file is part of Cute Chess.
     Copyright (C) 2008-2018 Cute Chess authors
 
@@ -41,7 +41,7 @@ MoveList::MoveList(QWidget* parent)
 	m_moveList->document()->setDefaultStyleSheet(
 		"a:link { text-decoration: none; } "
 		//".move { color: black; font-weight: bold; } "
-		".move { color: black;  } "   // ÖĞÎÄÆå²½²»ÓÃ¼Ó´ÖÏÔÊ¾
+		".move { color: black;  } "   // ä¸­æ–‡æ£‹æ­¥ä¸ç”¨åŠ ç²—æ˜¾ç¤º
 		".comment { color: green; }");
 
 	#ifdef Q_OS_WIN32

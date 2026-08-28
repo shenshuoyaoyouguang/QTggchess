@@ -1,4 +1,4 @@
-/*
+ï»¿/*
     This file is part of Cute Chess.
     Copyright (C) 2008-2018 Cute Chess authors
 
@@ -102,55 +102,55 @@ QString Result::description() const
 	QString str;
 
 	if (m_type == Resignation)
-		str = tr("%1 ·½ÈÏ¸º").arg(l);
+		str = tr("%1 æ–¹è®¤è´Ÿ").arg(l);
 	else if (m_type == Timeout)
 	{
 		if (l.isEmpty())
-			str = tr("³¬Ê±ÅĞºÍ");
+			str = tr("è¶…æ—¶åˆ¤å’Œ");
 		else
-			str = tr("%1 ³¬Ê±ÅĞ¸º").arg(l);
+			str = tr("%1 è¶…æ—¶åˆ¤è´Ÿ").arg(l);
 	}
 	else if (m_type == Adjudication)
 	{
 		if (w.isEmpty())
-			str = tr("ÊÖ¶¯ÅĞºÍ");
+			str = tr("æ‰‹åŠ¨åˆ¤å’Œ");
 		else
-			str = tr("%1 ÊÖ¶¯ÅĞÊ¤").arg(w);
+			str = tr("%1 æ‰‹åŠ¨åˆ¤èƒœ").arg(w);
 	}
 	else if (m_type == IllegalMove)
-		str = tr("%1 Êä³ö·Ç·¨Æå²½").arg(l);
+		str = tr("%1 è¾“å‡ºéæ³•æ£‹æ­¥").arg(l);
 	else if (m_type == Disconnection)
 	{
 		if (l.isEmpty())
-			str = tr("¶ÏÏßÅĞºÍ");
+			str = tr("æ–­çº¿åˆ¤å’Œ");
 		else
-			str = tr("%1 ¶ÏÏß").arg(l);
+			str = tr("%1 æ–­çº¿").arg(l);
 	}
 	else if (m_type == StalledConnection)
 	{
 		if (l.isEmpty())
-			str = tr("Á¬ÏßÖĞÖ¹ÅĞºÍ");
+			str = tr("è¿çº¿ä¸­æ­¢åˆ¤å’Œ");
 		else
-			str = tr("%1's Á¬ÏßÖĞÖ¹").arg(l);
+			str = tr("%1's è¿çº¿ä¸­æ­¢").arg(l);
 	}
 	else if (m_type == Agreement)
 	{
 		if (w.isEmpty())
-			str = tr("¹æÔòÅĞºÍ");
+			str = tr("è§„åˆ™åˆ¤å’Œ");
 		else
-			str = tr("%1 ¹æÔòÅĞÊ¤").arg(w);
+			str = tr("%1 è§„åˆ™åˆ¤èƒœ").arg(w);
 	}
 	else if (m_type == NoResult)
-		str = tr("Ã»ÓĞ½á¹û");
+		str = tr("æ²¡æœ‰ç»“æœ");
 	else if (m_type == ResultError)
-		str = tr("½á¹û³ö´í");
+		str = tr("ç»“æœå‡ºé”™");
 
 	if (m_description.isEmpty())
 	{
 		if (m_type == Win)
-			str = tr("%1 »ñÊ¤").arg(w);
+			str = tr("%1 è·èƒœ").arg(w);
 		else if (m_type == Draw)
-			str = tr("ºÍÆå");
+			str = tr("å’Œæ£‹");
 	}
 	else
 	{

@@ -1,4 +1,4 @@
-/*
+ï»¿/*
     This file is part of Cute Chess.
     Copyright (C) 2008-2018 Cute Chess authors
 
@@ -42,8 +42,8 @@ EvalWidget::EvalWidget(QWidget *parent)
 	m_statsTable->setMaximumHeight(maxHeight);
 
 	QStringList statsHeaders;
-	statsHeaders << tr("ËÙ¶È") << tr("¹þÏ£")
-		     << tr("ºóÌ¨") << tr("¸ÅÂÊ") << tr("EGB");
+	statsHeaders << tr("é€Ÿåº¦") << tr("å“ˆå¸Œ")
+		     << tr("åŽå°") << tr("æ¦‚çŽ‡") << tr("EGB");
 	m_statsTable->setHorizontalHeaderLabels(statsHeaders);
 	hHeader->setSectionResizeMode(QHeaderView::Stretch);
 	auto protoItem = new QTableWidgetItem;
@@ -56,8 +56,8 @@ EvalWidget::EvalWidget(QWidget *parent)
 	m_pvTable->verticalHeader()->hide();
 
 	QStringList pvHeaders;
-	pvHeaders << tr("Éî¶È") << tr("ÓÃÊ±") << tr("½Úµã")
-		  << tr("¹À·Ö") << tr("¹Ø¼üÂ·Ïß");
+	pvHeaders << tr("æ·±åº¦") << tr("ç”¨æ—¶") << tr("èŠ‚ç‚¹")
+		  << tr("ä¼°åˆ†") << tr("å…³é”®è·¯çº¿");
 	m_pvTable->setHorizontalHeaderLabels(pvHeaders);
 	m_pvTable->setColumnWidth(0, 50);
 	m_pvTable->setColumnWidth(1, 60);

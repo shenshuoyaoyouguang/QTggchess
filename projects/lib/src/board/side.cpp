@@ -1,4 +1,4 @@
-/*
+﻿/*
     This file is part of Cute Chess.
     Copyright (C) 2008-2018 Cute Chess authors
 
@@ -43,9 +43,9 @@ QString Side::symbol() const
 QString Side::toString() const
 {
 	if (m_type == White)
-		return tr("�췽");
+		return tr("红方");
 	else if (m_type == Black)
-		return tr("�ڷ�");
+		return tr("黑方");
 
 	return QString();
 }

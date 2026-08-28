@@ -1,4 +1,4 @@
-#include "elo.h"
+﻿#include "elo.h"
 #include <cmath>
 
 Elo::Elo(int wins, int losses, int draws)

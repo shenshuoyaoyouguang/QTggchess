@@ -1,4 +1,4 @@
-/*
+﻿/*
     This file is part of Cute Chess.
     Copyright (C) 2008-2018 Cute Chess authors
 
@@ -22,7 +22,7 @@
 #include <QMetaObject>
 #include <QDateTime>
 #include "board/boardfactory.h"
-#include "econode.h"
+#include "eco.h"
 #include "pgnstream.h"
 #include "moveevaluation.h"
 
@@ -55,7 +55,7 @@ QTextStream& operator<<(QTextStream& out, const PgnGame& game)
 
 PgnGame::PgnGame()
 	: m_startingSide(Chess::Side::White),
-	  m_eco(EcoNode::root()),
+	  m_ecoSequence(),
 	  m_tagReceiver(nullptr)
 {
 }
@@ -68,7 +68,7 @@ bool PgnGame::isNull() const
 void PgnGame::clear()
 {
 	m_startingSide = Chess::Side();
-	m_eco = EcoNode::root();
+	m_ecoSequence.clear();
 	m_tags.clear();
 	m_moves.clear();
 }
@@ -107,14 +107,17 @@ void PgnGame::addMove(const MoveData& data, bool addEco)
 {
 	m_moves.append(data);
 
-	if (addEco) {
-		m_eco = (m_eco && isStandard()) ? m_eco->child(data.moveString)
-						: nullptr;
-		if (m_eco && m_eco->isLeaf())
+	if (addEco && isStandard())
+	{
+		m_ecoSequence += (m_ecoSequence.isEmpty() ? QString()
+							  : " ")
+				  + data.moveString;
+		EcoData eco = ecoLookup(m_ecoSequence);
+		if (!eco.eco.isEmpty())
 		{
-			setTag("ECO", m_eco->ecoCode());
-			setTag("Opening", m_eco->opening());
-			setTag("Variation", m_eco->variation());
+			setTag("ECO", eco.eco);
+			setTag("Opening", eco.opening);
+			setTag("Variation", eco.variation);
 		}
 	}
 }

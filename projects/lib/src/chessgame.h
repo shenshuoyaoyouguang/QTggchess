@@ -1,4 +1,4 @@
-/*
+ï»¿/*
     This file is part of Cute Chess.
 
     Cute Chess is free software: you can redistribute it and/or modify
@@ -86,7 +86,7 @@ class LIB_EXPORT ChessGame : public QObject
 			this->emitLastMove();
 		};
 
-		bool isGetSetting;    // ÊÇ·ñ´ÓÉèÖÃÎÄ¼şÖĞµÃµ½ÁËÉèÖÃÊı¾İ
+		bool isGetSetting;    // æ˜¯å¦ä»è®¾ç½®æ–‡ä»¶ä¸­å¾—åˆ°äº†è®¾ç½®æ•°æ®
 		//EngineConfiguration m_engineConfig[2];
 
 	public slots:

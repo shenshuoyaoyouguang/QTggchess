@@ -1,4 +1,4 @@
-/*
+ï»¿/*
     This file is part of Cute Chess.
     Copyright (C) 2008-2018 Cute Chess authors
 
@@ -72,16 +72,6 @@ Board::~Board()
 {
 }
 
-//bool Board::isRandomVariant() const
-//{
-//	return false;
-//}
-
-//bool Board::variantHasDrops() const
-//{
-//	return false;
-//}
-
 bool Board::variantHasWallSquares() const
 {
 	return false;
@@ -91,11 +81,6 @@ QList<Piece> Board::reservePieceTypes() const
 {
 	return QList<Piece>();
 }
-
-//Board::CoordinateSystem Board::coordinateSystem() const
-//{
-//	return NormalCoordinates;
-//}
 
 Side Board::upperCaseSide() const
 {
@@ -119,20 +104,10 @@ void Board::initialize()
 	m_height = height();
 	for (int i = 0; i < (m_width + 2) * (m_height + 4); i++)
 		m_squares.append(Piece::WallPiece);
-	vInitialize();   // ÏÔÊ¾³õÊ¼»¯
-
-	//m_maxPieceSymbolLength = 1;
-	//for (const PieceData& pd: m_pieceData)
-	//	if (pd.symbol.length() > m_maxPieceSymbolLength)
-	//		m_maxPieceSymbolLength = pd.symbol.length();
+	vInitialize();   // æ˜¾ç¤ºåˆå§‹åŒ–
 
 	m_zobrist->initialize((m_width + 2) * (m_height + 4), m_pieceData.size());
 }
-
-//int Board::maxPieceSymbolLength() const
-//{
-//	return m_maxPieceSymbolLength;
-//}
 
 void Board::setPieceType(int type,
 			 const QString& name,
@@ -208,38 +183,6 @@ int Board::reserveType(int pieceType) const
 {
 	return pieceType;
 }
-
-//int Board::reserveCount(Piece piece) const
-//{
-//	if (!piece.isValid()
-//	||  piece.type() >= m_reserve[piece.side()].size())
-//		return 0;
-//	return m_reserve[piece.side()].at(piece.type());
-//}
-
-//void Board::addToReserve(const Piece& piece, int count)
-//{
-//	Q_ASSERT(piece.isValid());
-//	Q_ASSERT(count > 0);
-//
-//	Side side(piece.side());
-//	int type(piece.type());
-//	if (type >= m_reserve[side].size())
-//		m_reserve[side].resize(type + 1);
-//
-//	int& oldCount = m_reserve[side][type];
-//	for (int i = 1; i <= count; i++)
-//		xorKey(m_zobrist->reservePiece(piece, oldCount++));
-//}
-
-//void Board::removeFromReserve(const Piece& piece)
-//{
-//	Q_ASSERT(piece.isValid());
-//	Q_ASSERT(piece.type() < m_reserve[piece.side()].size());
-//
-//	int& count = m_reserve[piece.side()][piece.type()];
-//	xorKey(m_zobrist->reservePiece(piece, --count));
-//}
 
 Square Board::chessSquare(int index) const
 {
@@ -335,7 +278,7 @@ int Board::squareIndex(const QString& str) const
 	return squareIndex(chessSquare(str));
 }
 
-QString Board::lanMoveString(const Move& move)   // ³¤Æå²½±í´ï
+QString Board::lanMoveString(const Move& move)   // é•¿æ£‹æ­¥è¡¨è¾¾
 {
 	QString str;
 
@@ -750,44 +693,8 @@ void Board::generateMoves(QVarLengthArray<Move>& moves, int pieceType) const
 			generateMovesForPiece(moves, tmp.type(), sq);
 	}
 
-	//generateDropMoves(moves, pieceType);
 }
 
-//void Board::GetNextPosKeys(QVector<quint64>& keys)
-//{
-//	QVarLengthArray<Move> moves;
-//	generateMoves(moves);
-//
-//	for (int i = 0; i < moves.size(); i++)
-//	{
-//		
-//		Move m = moves[i];
-//		makeMove(m);
-//		if (isLegalPosition()) {
-//			keys.append(m_key);
-//		}
-//		undoMove();
-//	}
-//}
-
-//void Board::generateDropMoves(QVarLengthArray<Move>& moves, int pieceType) const
-//{
-//	const QVector<int>& pieces(m_reserve[m_side]);
-//	if (pieces.isEmpty())
-//		return;
-//
-//	if (pieceType == Piece::NoPiece)
-//	{
-//		for (int i = 1; i < pieces.size(); i++)
-//		{
-//			Q_ASSERT(pieces.at(i) >= 0);
-//			if (pieces.at(i) > 0)
-//				generateMovesForPiece(moves, i, 0);
-//		}
-//	}
-//	else if (pieceType < pieces.size() && pieces.at(pieceType) > 0)
-//		generateMovesForPiece(moves, pieceType, 0);
-//}
 
 void Board::generateHoppingMoves(int sourceSquare,
 				 const QVarLengthArray<int>& offsets,
@@ -861,7 +768,7 @@ int Board::captureType(const Move& move) const
 	return Piece::NoPiece;
 }
 
-// Õâ¸öÊÇÊäÈëµÄ²»ÐèÒªunmakeµÄboard  ³£½«³£×½ÅÐ¶Ï
+// è¿™ä¸ªæ˜¯è¾“å…¥çš„ä¸éœ€è¦unmakeçš„board  å¸¸å°†å¸¸æ‰åˆ¤æ–­
 bool Board::vIsBan(const Move& move) {
 	
 	(void)move;
@@ -897,10 +804,10 @@ bool Board::vIsBan(const Move& move) {
 
 	n--;
 	if ((moCheck[1] + moCheck[0]) == 2) {
-		return false;  // Ë«·½³£½«
+		return false;  // åŒæ–¹å¸¸å°†
 	}
 	if (moCheck[1 & n]) {
-		return true;   // ÎÒ·½³£½«
+		return true;   // æˆ‘æ–¹å¸¸å°†
 	}	
 	return isBan;
 }
@@ -922,7 +829,7 @@ bool Board::vIsLegalMove(const Move& move)
 
 		repcount = this->repeatCount();
 
-		if (repcount >= 2) {  // ¶þ´ÎÖØ¸´£¬ÒªÅÐ¶ÏÊÇ²»ÊÇ·¸¹æÁË
+		if (repcount >= 2) {  // äºŒæ¬¡é‡å¤ï¼Œè¦åˆ¤æ–­æ˜¯ä¸æ˜¯çŠ¯è§„äº†
 			Board* newB = this->copy();
 			isBan = newB->vIsBan(move);
 			delete newB;

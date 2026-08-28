@@ -1,4 +1,4 @@
-/*
+﻿/*
     This file is part of Cute Chess.
     Copyright (C) 2008-2018 Cute Chess authors
 
@@ -16,35 +16,19 @@
     along with Cute Chess.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "aiwokboard.h"
+#ifndef ECO_H
+#define ECO_H
 
-namespace Chess {
+#include <QString>
 
-AiWokBoard::AiWokBoard()
-	: MakrukBoard()
+struct EcoData
 {
-	//setPieceType(AiWok, tr("ai-wok"), "A", FerzMovement | MaMovement | CheMovement, "C");
-}
+	QString eco;
+	QString opening;
+	QString variation;
+};
 
-Board* AiWokBoard::copy() const
-{
-	return new AiWokBoard(*this);
-}
+bool ecoInitialize();
+EcoData ecoLookup(const QString& sanSequence);
 
-QString AiWokBoard::variant() const
-{
-	return "ai-wok";
-}
-
-QString AiWokBoard::defaultFenString() const
-{
-	return "rnsaksnr/8/pppppppp/8/8/PPPPPPPP/8/RNSKASNR w - - 0 1";
-}
-
-bool AiWokBoard::insufficientMaterial() const
-{
-	return pieceCount(Side::NoSide, AiWok) == 0
-	&&     MakrukBoard::insufficientMaterial();
-}
-
-} // namespace Chess
+#endif // ECO_H

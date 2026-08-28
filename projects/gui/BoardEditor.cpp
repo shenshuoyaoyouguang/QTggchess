@@ -1,4 +1,4 @@
-#include "BoardEditor.h"
+ï»¿#include "BoardEditor.h"
 #include "ui_boardeditor.h"
 #include <qpushbutton.h>
 #include <qdebug.h>
@@ -17,8 +17,8 @@ BoardEditorDlg::BoardEditorDlg(Chess::Board* board, QWidget* parrent) :
 	ui->boardView->setRenderHint(QPainter::Antialiasing);
 	ui->boardView->setMouseTracking(true);
 	ui->boardView->setMinimumSize(boardscene->sceneRect().size().toSize());
-	ui->buttonBox->button(QDialogButtonBox::Ok)->setText(tr("È·¶¨"));
-	ui->buttonBox->button(QDialogButtonBox::Cancel)->setText(tr("È¡Ïû"));
+	ui->buttonBox->button(QDialogButtonBox::Ok)->setText(tr("ç¡®å®š"));
+	ui->buttonBox->button(QDialogButtonBox::Cancel)->setText(tr("å–æ¶ˆ"));
 
 	connect(ui->comboBoxInitialStatus, SIGNAL(currentIndexChanged(int)), this, SLOT(initBoard(int)));
 	connect(ui->comboBoxFlipSide, SIGNAL(currentIndexChanged(int)), this, SLOT(setFlip(int)));
