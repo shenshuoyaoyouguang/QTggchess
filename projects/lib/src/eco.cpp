@@ -81,7 +81,15 @@ QDataStream& operator>>(QDataStream& in, EcoNode*& node)
 // Upgrade path: split per-thread tree if ECO lookups become a contention point.
 EcoNode* loadRoot()
 {
-	Q_INIT_RESOURCE(eco);
+	// ponytail: Q_INIT_RESOURCE expands to a call into an anonymous
+	// namespace in the generated qrc_eco.cpp, which becomes internal
+	// linkage and is invisible across translation units (and thus
+	// across a static library's archive members at link time).
+	// Declare the symbol extern here so the linker resolves it
+	// against qrc_eco.o from whichever translation unit provides it
+	// in the final executable.
+	extern int qInitResources_eco();
+	qInitResources_eco();
 
 	QFile file(":/eco.bin");
 	if (!file.open(QIODevice::ReadOnly))
