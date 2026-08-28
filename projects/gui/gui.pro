@@ -8,6 +8,10 @@ DESTDIR = $$PWD
 
 include(../lib/lib.pri)
 include(../lib/libexport.pri)
+# ECO qrc lives in lib/res; the static lib doesn't expose resource init
+# symbols to consumers, so each executable must include the .qrc itself
+# to satisfy Q_INIT_RESOURCE(eco) inside eco.cpp.
+include(../lib/res/res.pri)
 
 CUTECHESS_VERSION = 1.1.0
 
