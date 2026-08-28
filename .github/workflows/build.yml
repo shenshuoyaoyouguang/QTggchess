@@ -1,0 +1,84 @@
+name: build-windows-msvc
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-2019
+    timeout-minutes: 45
+
+    env:
+      QT_VERSION: 5.15.2
+      QT_ARCH: win64_msvc2019_64
+      # Skip the OpenCV screen-capture feature. CI runner has no OpenCV,
+      # and the local vcxproj pins D:\opencv which doesn't exist here.
+      QT_NO_CAPTURE: 1
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: ${{ env.QT_VERSION }}
+          host: windows
+          target: desktop
+          arch: ${{ env.QT_ARCH }}
+          modules: 'qtsvg qtwinextras qtmultimedia qtimageformats'
+          cache: true
+
+      - name: Set up MSVC
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
+
+      - name: Verify toolchain
+        shell: cmd
+        run: |
+          where qmake
+          where nmake
+          where cl
+          qmake -query QT_INSTALL_PREFIX
+
+      - name: Generate Makefiles
+        shell: cmd
+        run: |
+          set PATH=%QtDir%\bin;%PATH%
+          cd D:\a\QTggchess\QTggchess
+          qmake cutechess.pro "CONFIG+=no_capture"
+
+      - name: Build (lib + gui + cli)
+        shell: cmd
+        run: |
+          cd D:\a\QTggchess\QTggchess
+          nmake /NOLOGO /S
+
+      - name: Collect build outputs
+        shell: cmd
+        run: |
+          if not exist artifacts mkdir artifacts
+          copy /Y projects\lib\libcutechess.a      artifacts\  || echo lib artifact not found
+          copy /Y projects\gui\cutechess.exe       artifacts\  || echo gui artifact not found
+          copy /Y projects\cli\cutechess-cli.exe   artifacts\  || echo cli artifact not found
+          dir artifacts
+
+      - name: Package artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: cutechess-windows-x64
+          path: artifacts/*
+          if-no-files-found: warn
+          retention-days: 14
+
+      - name: Smoke test (cutechess-cli --help)
+        shell: cmd
+        run: |
+          set PATH=%QtDir%\bin;%PATH%
+          set QT_QPA_PLATFORM=minimal
+          projects\cli\cutechess-cli.exe --help | findstr /R "cutechess-cli"
