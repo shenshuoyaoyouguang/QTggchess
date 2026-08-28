@@ -70,9 +70,16 @@ jobs:
           test -x ./projects/gui/cutechess
 
       - name: Build unit tests
-        working-directory: ${{ github.workspace }}
+        working-directory: ${{ github.workspace }}/projects/lib/tests
         run: |
-          qmake projects/lib/tests/tests.pro
+          # qmake's subdirs template generates a Makefile whose subdir
+          # targets are relative to the directory the .pro lives in.
+          # Running `qmake tests.pro` from the repo root would generate
+          # a Makefile that `cd eco/` from the repo root, creating a
+          # stray projects/eco/ at the top of the repo. cd into the
+          # tests directory first so the subdirs Makefile finds each
+          # child in its proper place.
+          qmake tests.pro
           make -j"$(nproc)"
 
       - name: Run unit tests
