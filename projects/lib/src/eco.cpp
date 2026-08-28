@@ -79,25 +79,16 @@ QDataStream& operator>>(QDataStream& in, EcoNode*& node)
 
 // ponytail: duplicated from old econode.cpp; keep one global ECO tree in memory.
 // Upgrade path: split per-thread tree if ECO lookups become a contention point.
-// ponytail: Q_INIT_RESOURCE() generates a mangled call to a symbol
-// in whatever namespace it is invoked from. Because the surrounding
-// file is wrapped in an anonymous namespace, the original macro
-// produced a reference to (anonymous namespace)::qInitResources_eco()
-// that rcc generates in the *global* namespace as qInitResources_eco().
-// The two symbols did not match, so the linker never resolved the
-// call from inside the static library. We replicate the macro inline
-// at file scope (i.e. outside the anonymous namespace) so the mangled
-// name matches rcc's global symbol and the link succeeds.
-namespace { int ecoInitialize(); }
-int ecoInitialize()
-{
-	extern int qInitResources_eco();
-	qInitResources_eco();
-	return 0;
-}
+// ponytail: Q_INIT_RESOURCE() generates a call whose mangled name
+// inherits the surrounding namespace. loadRoot() lives in the
+// anonymous namespace below, which would mangle the reference to
+// (anonymous namespace)::qInitResources_eco and never match rcc's
+// global qInitResources_eco. We therefore initialize the resource
+// inside the file-scope ecoInitialize() below (where extern resolves
+// to the global symbol) and drop the original Q_INIT_RESOURCE call
+// from loadRoot().
 EcoNode* loadRoot()
 {
-	ecoInitialize();
 
 	QFile file(":/eco.bin");
 	if (!file.open(QIODevice::ReadOnly))
@@ -117,6 +108,8 @@ EcoNode* loadRoot()
 
 bool ecoInitialize()
 {
+	extern int qInitResources_eco();
+	qInitResources_eco();
 	QMutexLocker locker(&s_mutex);
 	if (s_root)
 		return true;
