@@ -167,6 +167,18 @@ jobs:
           cache: true
           cache-key-prefix: install-qt-action-qt5-${{ matrix.triplet }}
 
+      # VS 2026 (MSVC v14.51) 移除了 stdext 命名空间，而 Qt 5.15.2 官方头文件
+      # 无条件把 QT_MAKE_*_ARRAY_ITERATOR 定义为 stdext::make_*_array_iterator，
+      # 编译 QVector::operator== 等即报错。替换为直通 (x)，功能等价。
+      - name: Patch Qt 5.15 headers (stdext removed in MSVC v14.51+)
+        if: matrix.qt_install == 'aqt'
+        run: |
+          qt_root="${QT_ROOT_DIR//\\//}"
+          hdr="$qt_root/include/QtCore/qcompilerdetection.h"
+          sed -i 's/#  define QT_MAKE_CHECKED_ARRAY_ITERATOR(x, N) stdext::make_checked_array_iterator(x, size_t(N))/#  define QT_MAKE_CHECKED_ARRAY_ITERATOR(x, N) (x)/' "$hdr"
+          sed -i 's/#  define QT_MAKE_UNCHECKED_ARRAY_ITERATOR(x) stdext::make_unchecked_array_iterator(x)/#  define QT_MAKE_UNCHECKED_ARRAY_ITERATOR(x) (x)/' "$hdr"
+          grep -n "QT_MAKE_CHECKED_ARRAY_ITERATOR(x, N)" "$hdr" | head -2
+
       - name: Cache build tree (ccache)
         if: runner.os == 'Linux'
         uses: actions/cache@v4
