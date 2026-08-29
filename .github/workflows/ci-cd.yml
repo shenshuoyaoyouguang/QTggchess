@@ -130,6 +130,9 @@ jobs:
             qt_install: aqt
             archive_ext: zip
             timeout: 60
+    env:
+      # 与昨晚 build.yml 一致：无 X 环境下 Qt 初始化需要 offscreen 平台插件
+      QT_QPA_PLATFORM: offscreen
     steps:
       - name: Checkout
         uses: actions/checkout@v4
