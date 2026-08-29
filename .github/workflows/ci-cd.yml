@@ -158,9 +158,9 @@ jobs:
           target: desktop
           # Qt >= 5.9 && < 6.8 的 Windows 架构规则：win64_msvc2019_64
           arch: win64_msvc2019_64
-          # lib/cli 仅 core+sql，gui 需 svg/widgets/concurrent/printsupport；
-          # 无需 qttools（项目无 lrelease 依赖）
-          modules: qtbase qtsvg
+          # qtsvg 在 Qt 5.15.2 是基础 archive 而非 addon 模块，必须走 archives 参数
+          # lib/cli 仅 core+sql，gui 需 svg/widgets/concurrent/printsupport
+          archives: qtbase qtsvg
           cache: true
           cache-key-prefix: install-qt-action-qt5-${{ matrix.triplet }}
 
