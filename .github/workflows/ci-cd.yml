@@ -74,9 +74,18 @@ jobs:
           qmake -query QT_VERSION
           g++ --version | head -1
 
+      - name: Generate Makefiles
+        run: |
+          qmake cutechess.pro "${{ env.QMAKE_ARGS }}" QMAKE_CXX='ccache g++'
+          qmake -query QT_VERSION
+
+      - name: Build (lib + gui + cli)
+        run: make -j"$(nproc)"
+
       - name: Build unit tests
         working-directory: ${{ github.workspace }}/projects/lib/tests
         run: |
+          # 测试链接依赖 projects/lib/libcutechess.a，必须先完成上一步构建
           qmake tests.pro QMAKE_CXX='ccache g++'
           make -j"$(nproc)"
 
