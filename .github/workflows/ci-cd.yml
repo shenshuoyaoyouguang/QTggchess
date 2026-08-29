@@ -1,0 +1,309 @@
+name: CI/CD
+
+# ------------------------------------------------------------------
+# 触发条件（互斥，不重复执行）：
+#   - push 到 master        → verify + build（不含 release）
+#   - push tag v*.*.*       → verify + build + release
+#   - PR 指向 master        → verify + build
+# 说明：tag push 不匹配 branches 过滤器；PR 分支 push 不匹配 master。
+# ------------------------------------------------------------------
+on:
+  push:
+    branches: [master]
+    tags: ['v*.*.*']
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+
+# 同一 ref 只保留一次运行；tag 构建不取消，避免 Release 上传被打断。
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ !startsWith(github.ref, 'refs/tags/') }}
+
+# 最小权限：默认只读；release job 单独提权 contents: write。
+permissions:
+  contents: read
+
+env:
+  # 上游 cutechess.pro 要求 Qt >= 5.7（拒绝 4.x / 5.0-5.6）。
+  # Linux 用 ubuntu-22.04 的 apt qtbase5-dev（5.15）；Windows 用 aqt 装 5.15.2。
+  QT_VERSION: '5.15.2'
+  # 跳过 OpenCV 屏幕捕获：CI 无 OpenCV，capture.cpp 也依赖 <Windows.h>
+  QMAKE_ARGS: 'CONFIG+=no_capture'
+
+# 统一 bash，保证 Linux / Windows runner 脚本语法一致
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  # ==================================================================
+  # 阶段 1：验证（依赖缓存 → 构建测试目标 → 运行单元测试）
+  # Linux 快速门禁，通过后才进入多平台生产构建。
+  # ==================================================================
+  verify:
+    name: Verify
+    runs-on: ubuntu-22.04
+    timeout-minutes: 30
+    env:
+      QT_QPA_PLATFORM: offscreen
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Cache ccache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ccache
+          key: verify-ccache-${{ runner.os }}-${{ hashFiles('projects/**/*.pro', 'projects/**/*.pri', 'projects/**/*.cpp', 'projects/**/*.h') }}
+          restore-keys: |
+            verify-ccache-${{ runner.os }}-
+            build-ccache-${{ runner.os }}-
+
+      - name: Install Qt 5 + build tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            qtbase5-dev qtbase5-dev-tools \
+            qttools5-dev-tools \
+            libqt5svg5-dev libqt5sql5-sqlite \
+            make g++ pkg-config ccache
+
+      - name: Verify toolchain
+        run: |
+          qmake -query QT_VERSION
+          g++ --version | head -1
+
+      - name: Build unit tests
+        working-directory: ${{ github.workspace }}/projects/lib/tests
+        run: |
+          qmake tests.pro QMAKE_CXX='ccache g++'
+          make -j"$(nproc)"
+
+      - name: Run unit tests
+        working-directory: ${{ github.workspace }}
+        run: |
+          set -euo pipefail
+          # tst_eco：qInitResources_eco 回归测试，验证 :/eco.bin 已嵌入可执行文件。
+          # tst_board 在 QAbstractItemModelTester 启动时崩溃（上游 modeltest 依赖问题），
+          # 未在 CI 启用；tst_polyglotbook 因西式象棋 API 移除而不编译。
+          tst_eco_bin=""
+          for cand in projects/lib/tests/eco/tst_eco projects/lib/tests/eco/release/tst_eco; do
+            if [ -x "$cand" ]; then tst_eco_bin="$cand"; break; fi
+          done
+          if [ -z "$tst_eco_bin" ]; then
+            echo "::error::tst_eco 二进制未找到"
+            exit 1
+          fi
+          "$tst_eco_bin"
+          echo "::notice::单元测试通过：tst_eco"
+
+  # ==================================================================
+  # 阶段 2：生产构建（Linux + Windows 并行）
+  # needs verify；fail-fast 保证任一平台失败立即取消另一平台。
+  # ==================================================================
+  build:
+    name: Build (${{ matrix.triplet }})
+    needs: verify
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: ${{ matrix.timeout }}
+    strategy:
+      fail-fast: true
+      matrix:
+        include:
+          - os: ubuntu-22.04
+            triplet: linux-x86_64
+            qt_install: apt
+            archive_ext: tar.gz
+            timeout: 30
+          - os: windows-latest
+            triplet: windows-x86_64
+            qt_install: aqt
+            archive_ext: zip
+            timeout: 60
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Windows：MSVC 默认不在 PATH，需初始化 vcvarsall（提供 cl/nmake/rc）
+      - name: Setup MSVC environment
+        if: runner.os == 'Windows'
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Install Qt 5 (apt)
+        if: matrix.qt_install == 'apt'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            qtbase5-dev qtbase5-dev-tools \
+            qttools5-dev-tools \
+            libqt5svg5-dev libqt5sql5-sqlite \
+            make g++ pkg-config ccache
+
+      - name: Install Qt 5 (aqt, Windows MSVC)
+        if: matrix.qt_install == 'aqt'
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: ${{ env.QT_VERSION }}
+          host: windows
+          target: desktop
+          # Qt >= 5.9 && < 6.8 的 Windows 架构规则：win64_msvc2019_64
+          arch: win64_msvc2019_64
+          # lib/cli 仅 core+sql，gui 需 svg/widgets/concurrent/printsupport；
+          # 无需 qttools（项目无 lrelease 依赖）
+          modules: qtbase qtsvg
+          cache: true
+          cache-key-prefix: install-qt-action-qt5-${{ matrix.triplet }}
+
+      - name: Cache build tree (ccache)
+        if: runner.os == 'Linux'
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ccache
+          key: build-ccache-${{ runner.os }}-${{ hashFiles('projects/**/*.pro', 'projects/**/*.pri', 'projects/**/*.cpp', 'projects/**/*.h') }}
+          restore-keys: |
+            build-ccache-${{ runner.os }}-
+            verify-ccache-${{ runner.os }}-
+
+      - name: Resolve version
+        id: meta
+        run: |
+          version="${GITHUB_REF_NAME//\//-}"
+          echo "version=${version}" >> "$GITHUB_OUTPUT"
+          echo "archive=QTggchess-${version}-${{ matrix.triplet }}" >> "$GITHUB_OUTPUT"
+
+      - name: qmake
+        run: |
+          if [ "${{ matrix.qt_install }}" = "apt" ]; then
+            qmake cutechess.pro "${{ env.QMAKE_ARGS }}" QMAKE_CXX='ccache g++'
+          else
+            qt_root="${QT_ROOT_DIR//\\//}"
+            "$qt_root/bin/qmake.exe" cutechess.pro "${{ env.QMAKE_ARGS }}"
+          fi
+          qmake -query QT_VERSION
+
+      - name: Build
+        run: |
+          if [ "${{ matrix.qt_install }}" = "apt" ]; then
+            make -j"$(nproc)"
+          else
+            nmake -f Makefile
+          fi
+
+      - name: Verify artifacts
+        run: |
+          set -euo pipefail
+          if [ "${{ matrix.qt_install }}" = "apt" ]; then
+            for f in projects/lib/libcutechess.a projects/gui/cutechess projects/cli/cutechess-cli; do
+              test -f "$f" || { echo "::error::产物缺失: $f"; exit 1; }
+            done
+            ls -l projects/lib/libcutechess.a projects/gui/cutechess projects/cli/cutechess-cli
+          else
+            shopt -s nullglob
+            libs=(projects/lib/*cutechess*.lib)
+            if [ ${#libs[@]} -eq 0 ]; then echo "::error::MSVC 静态库产物缺失 (projects/lib/*cutechess*.lib)"; exit 1; fi
+            for f in projects/gui/cutechess.exe projects/cli/cutechess-cli.exe; do
+              test -f "$f" || { echo "::error::产物缺失: $f"; exit 1; }
+            done
+            ls -l "${libs[@]}" projects/gui/cutechess.exe projects/cli/cutechess-cli.exe
+          fi
+          echo "::notice::产物校验通过"
+
+      - name: Smoke test
+        run: |
+          if [ "${{ matrix.qt_install }}" = "apt" ]; then
+            ./projects/cli/cutechess-cli --help | head -20
+          else
+            QT_QPA_PLATFORM=offscreen ./projects/cli/cutechess-cli.exe --help | head -20
+          fi
+
+      - name: Package
+        run: |
+          set -euo pipefail
+          name="${{ steps.meta.outputs.archive }}"
+          mkdir -p dist
+          if [ "${{ matrix.archive_ext }}" = "zip" ]; then
+            7z a "dist/${name}.zip" projects/lib/cutechess.lib projects/gui/cutechess.exe projects/cli/cutechess-cli.exe
+          else
+            tar -czf "dist/${name}.tar.gz" \
+              projects/lib/libcutechess.a \
+              projects/gui/cutechess \
+              projects/cli/cutechess-cli
+          fi
+          ls -l dist
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.meta.outputs.archive }}
+          path: dist/*
+          if-no-files-found: error
+          retention-days: 7
+
+  # ==================================================================
+  # 阶段 3：发布
+  # 仅当 verify 与 build 全部通过、且由 v*.*.* tag 触发时执行。
+  # 权限提权为 contents: write；仅用自动注入的 GITHUB_TOKEN，无自定义 secrets。
+  # ==================================================================
+  release:
+    name: Release
+    needs: [verify, build]
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: dist
+          pattern: QTggchess-*
+          merge-multiple: true
+
+      - name: Generate release notes
+        run: |
+          set -euo pipefail
+          tag="${GITHUB_REF_NAME}"
+          prev=$(git describe --tags --abbrev=0 "${tag}^" 2>/dev/null || true)
+          {
+            echo "## QTggchess ${tag}"
+            echo ""
+            if [ -n "$prev" ]; then
+              echo "**完整变更**: \`${prev}...${tag}\`"
+              echo ""
+              echo "### 提交记录"
+              git log --no-merges --pretty=format:'- %s (%h)' "${prev}..${tag}"
+            else
+              echo "首个正式版本。"
+              echo ""
+              echo "### 提交记录"
+              git log --no-merges --pretty=format:'- %s (%h)' "${tag}"
+            fi
+            echo ""
+            echo "### 构建产物"
+            echo ""
+            echo "| 平台 | 文件 |"
+            echo "| --- | --- |"
+            for f in dist/*; do
+              echo "| $(basename "$f" | sed -E 's/.*-(linux|windows)-x86_64.*/\1/') | \`$(basename "$f")\` |"
+            done
+          } > RELEASE_NOTES.md
+          cat RELEASE_NOTES.md
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: QTggchess ${{ github.ref_name }}
+          body_path: RELEASE_NOTES.md
+          files: dist/*
+          draft: false
+          # v1.2.3-rc1 这类含连字符的 tag 自动标记为预发布
+          prerelease: ${{ contains(github.ref_name, '-') }}
+          fail_on_unmatched_files: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

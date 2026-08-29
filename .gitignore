@@ -438,3 +438,9 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+
+# WorkBuddy 本地工作数据（含项目记忆，勿提交）
+.workbuddy/
+
+# CI 打包输出
+dist/
