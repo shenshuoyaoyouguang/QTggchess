@@ -62,7 +62,8 @@ CuteChessApplication::CuteChessApplication(int& argc, char* argv[])
 	  m_gameWall(nullptr),
 	  m_initialWindowCreated(false)
 {
-	QRandomGenerator::global()->seed(QTime(0,0,0).msecsTo(QTime::currentTime()));
+	// Qt 5.15+ 禁止对 QRandomGenerator::global() 重新播种（会触发 abort），
+	// global() 已由系统熵初始化，此前的按时间播种属于无效操作，故移除。
 
 	// Set the application icon
 	QIcon icon;

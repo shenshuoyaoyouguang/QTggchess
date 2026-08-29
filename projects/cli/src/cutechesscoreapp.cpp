@@ -32,7 +32,8 @@ CuteChessCoreApplication::CuteChessCoreApplication(int& argc, char* argv[])
 	  m_engineManager(nullptr),
 	  m_gameManager(nullptr)
 {
-	QRandomGenerator::global()->seed(QTime(0,0,0).msecsTo(QTime::currentTime()));
+	// Qt 5.15+ 禁止对 QRandomGenerator::global() 重新播种（会触发 abort），
+	// global() 已由系统熵初始化，此前的按时间播种属于无效操作，故移除。
 
 	QCoreApplication::setOrganizationName(QLatin1String("GGZero_Team"));
 	QCoreApplication::setOrganizationDomain(QLatin1String("ggzero.cn"));

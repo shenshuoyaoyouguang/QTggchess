@@ -539,9 +539,9 @@ EngineMatch* parseMatch(const QStringList& args, QObject* parent)
 		// Set the random seed manually
 		else if (name == "-srand")
 		{
-			uint seed = value.toUInt(&ok);
-			if (ok)
-				QRandomGenerator::global()->seed(seed);
+			// Qt 5.15+ 禁止对 QRandomGenerator::global() 重新播种（会触发 abort）。
+			// 参数仍被解析校验；全局随机源固定使用系统熵种子。
+			value.toUInt(&ok);
 		}
 		// Delay between games
 		else if (name == "-wait")
